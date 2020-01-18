@@ -1,10 +1,10 @@
 (ns ui.core
   (:require [reagent.core :as reagent :refer [atom]]
-            [clojure.string :as string :refer [split-lines split join]]
+            [clojure.string  :refer [split-lines split join]]
             [ui.helpers :refer [cos sin style url val-cyc]]
-            [ui.shapes :as shapes :refer [tri square pent hex hept oct
-                                          b1 b2 b3 b4]]
-            [ui.fills :as fills :refer
+            [ui.shapes :refer [tri square pent hex hept oct
+                               b1 b2 b3 b4]]
+            [ui.fills :refer
               [gray mint midnight navy blue orange
                 br-orange pink white yellow]]
             [ui.generators :refer
@@ -12,8 +12,8 @@
               gen-circ gen-line gen-poly gen-rect gen-shape draw
               gen-group gen-offset-lines gen-bg-lines gen-mask
               gen-grid gen-line-grid gen-cols gen-rows]]
-            [ui.filters :as filters :refer [turb noiz soft-noiz disappearing splotchy blur]]
-            [ui.patterns :as patterns :refer
+            [ui.filters :refer [turb noiz soft-noiz disappearing splotchy blur]]
+            [ui.patterns :refer
              [ gen-color-noise pattern pattern-def
                blue-dots blue-lines
                pink-dots pink-lines pink-dots-1 pink-dots-2 pink-dots-3 pink-dots-4 pink-dots-5
@@ -25,7 +25,7 @@
                yellow-dots yellow-lines
                white-dots white-dots-lg white-lines
                shadow noise]]
-            [ui.animations :as animations :refer
+            [ui.animations :refer
               [ make-body splice-bodies make-frames!
                 nth-frame even-frame odd-frame
                 seconds-to-frames frames-to-seconds
@@ -89,7 +89,6 @@
                                (str op-end)])))
 
 (fade-start! "fi" 1)
-
 
 (make-frames! "etof" [0 100] (make-body "transform" ["translateY(10px)" "translateY(1000px)"]))
 
@@ -187,7 +186,7 @@
   (atom  (map
           #(->>
             (gen-rect white (+ 30 (* % 160)) 10 200 36)
-            (anim "etof" "1.2s" "infinite" {:delay (str (* .5 %) "s")})
+            (anim "etof" "1.2s" "infinite" {:delay (str (* 0.5 %) "s")})
             (draw))
           (range 10))))
 
@@ -200,19 +199,20 @@
    (draw)
    (atom)))
 
-(def bg (->>
-         (gen-circ (pattern (str "noise-" navy)) (* .5 @width) (* .5 @height) 1800)
-         (style {:opacity 1 :transform-origin "center" :transform "scale(4)"})
-         (anim "sc-rot" "3s" "infinite" {:timing "linear"})
-         (draw)
-         (atom)))
+(def bg
+  (->>
+   (gen-circ (pattern (str "noise-" navy)) (* 0.5 @width) (* 0.5 @height) 1800)
+   (style {:opacity 1 :transform-origin "center" :transform "scale(4)"})
+   (anim "sc-rot" "3s" "infinite" {:timing "linear"})
+   (draw)
+   (atom)))
 
 
 (def bb2
   (->>
     (gen-shape mint oct)
     (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"})
-      ;(style {:mix-blend-mode "luminosity" :filter (url (:id noiz))} )
+    ;(style {:mix-blend-mode "luminosity" :filter (url (:id noiz))} )
     (style {:mix-blend-mode "luminosity"})
     (anim "woosh" "4s" "infinite")
     (draw)
@@ -222,7 +222,7 @@
   (->>
     (gen-shape yellow oct)
     (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"})
-      ;(style {:mix-blend-mode "color-dodge" :filter (url (:id noiz))} )
+    ;(style {:mix-blend-mode "color-dodge" :filter (url (:id noiz))} )
     (style {:mix-blend-mode "color-dodge"})
 
     (anim "woosh" "2s" "infinite")
@@ -240,17 +240,17 @@
     (atom)))
 
 (def scale-me
-        (->>
-          (gen-rect (pattern (str "noise-" yellow)) 0 0 @width @height)
-          (style {:transform "scale(50)"})
-          (anim "scaley-huge" "5s" "infinite")
-          (draw)
-          (atom)))
+  (->>
+    (gen-rect (pattern (str "noise-" yellow)) 0 0 @width @height)
+    (style {:transform "scale(50)"})
+    (anim "scaley-huge" "5s" "infinite")
+    (draw)
+    (atom)))
 
 (def new-scale
   (->>
    (gen-circ white 0 0 100)
-   (style {:opacity .7})
+   (style {:opacity 0.7})
    (style {:transform "translate(10vh, 60vh)"})
    (gen-group {:style {:animation "scaley 10s infinite"}})
    (atom)))
@@ -279,12 +279,12 @@
     (fn [idx color]
         (->>
           (gen-rect color -100 -100 "120%" "120%" (url "cutout"))
-          (style {:opacity .4
+          (style {:opacity 0.4
                   :transform-origin "center"
                   :transform (str
                               "translate(" (- (rand-int 200) 100) "px, " (- (rand-int 300) 100) "px)"
                               "rotate(" (- 360 (rand-int 720)) "deg)")})
-          (anim "fade-in-out" "10s" "infinite" {:delay (str (* .1 idx) "s")})
+          (anim "fade-in-out" "10s" "infinite" {:delay (str (* 0.1 idx) "s")})
           (draw)
           (atom)))
     (take 10 (repeatedly #(nth [mint navy navy mint] (rand-int 6))))))
@@ -371,7 +371,7 @@
 
       (->>
         (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
-        (style {:opacity .9})
+        (style {:opacity 0.9})
         (draw)))
 
     (when-not (nth-frame 8 frame)
@@ -383,13 +383,18 @@
     @new-scale
 
     (->>
-      (gen-circ white (* 0.5 @width) (* 0.5 @height) (val-cyc frame [100 100 100 100 200 200 200 200 200 50 50 50 50 50 200 200 200 200  200 200 200 200 100 100 100 100]))
+      (gen-circ white
+                (* 0.5 @width)
+                (* 0.5 @height)
+                (val-cyc frame [100 100 100 100 200 200 200 200 200 50 50 50 50 50 200 200 200 200 200 200 200 200 100 100 100 100]))
       (draw)
       (when (nth-frame 4 frame)))
 
     (->>
       (gen-shape (pattern (:id navy-lines)) oct)
-      (style {:transform (str "translate(70vw, 10vh) scale("(val-cyc frame [.5 .5 .5 .5 .5 .5 1 1 1 1 1 1 .9 .9 .9 .9 .9 .9])")")})
+      (style {:transform (str "translate(70vw, 10vh) scale("
+                              (val-cyc frame [0.5 0.5 0.5 0.5 0.5 0.5 1 1 1 1 1 1 0.9 0.9 0.9 0.9 0.9 0.9])
+                              ")")})
       (draw)
       (when (nth-frame 6 frame)))
 
@@ -409,6 +414,7 @@
     ;(when (nth-frame 8 frame) @d)
     ;(when (nth-frame 6 frame) @e)
     ;(when (nth-frame 6 frame) @f)
+
     (when (nth-frame 7 frame) @g)
 
 
@@ -421,6 +427,7 @@
     ;   (gen-shape pink b2)
     ;   (style {:transform "translate(20vw, 30vh) scale(2)"})
     ;   (draw))
+
     ; (when (nth-frame 4 frame) @b)
     ; (when (nth-frame 6 frame) @c)
     ; (when (nth-frame 7 frame) @d)
@@ -436,8 +443,7 @@
       (gen-line-grid midnight
                      4
                      80 80
-                     {:col 20 :row 20}))))
-; cx end
+                     {:col 20 :row 20})))) ; cx end
 
 (when DEBUG
   (defonce collection (atom (cx 1))))
@@ -459,22 +465,38 @@
 ;; ----------- DEFS AND DRAW ------------------------------
 
 (def gradients
-  [[:linearGradient { :id "grad" :key (random-uuid)}]
+  [[:linearGradient {:id "grad" :key (random-uuid)}]
    [:stop { :offset "0" :stop-color "white" :stop-opacity "0"}]
    [:stop { :offset "1" :stop-color "white" :stop-opacity "1"}]])
 
 (def mask-list
-  [["poly-mask" [:path {:d b2 :fill "#fff" :style { :transform-origin "center" :animation "woosh 2s infinite"}}]]
+  [["poly-mask" [:path {:d b2
+                        :fill "#fff"
+                        :style {:transform-origin "center"
+                                :animation "woosh 2s infinite"}}]]
 
-   ["poly-mask-2" [:path {:d b3 :fill "#fff" :style { :transform-origin "center" :animation "woosh-3 3s infinite"}}]]
+   ["poly-mask-2" [:path {:d b3
+                          :fill "#fff"
+                          :style {:transform-origin "center"
+                                  :animation "woosh-3 3s infinite"}}]]
 
-   ["grad-mask" [:circle { :cx (* 0.5 @width) :cy (* 0.5 @height) :r 260 :fill "url(#grad)"}]]
+   ["grad-mask" [:circle {:cx (* 0.5 @width)
+                          :cy (* 0.5 @height)
+                          :r 260
+                          :fill "url(#grad)"}]]
 
    ["cutout" (->>
-               (gen-rect white 10 12 (* 0.94 @width) (* 0.88 @height))
+               (gen-rect white
+                         10
+                         12
+                         (* 0.94 @width)
+                         (* 0.88 @height))
                (draw))
              (->>
-               (gen-circ "#000" (* 0.7 @width) (* 0.7 @height) 100)
+               (gen-circ "#000"
+                         (* 0.7 @width)
+                         (* 0.7 @height)
+                         100)
                (draw))]
 
    ["rect-buds" (->>
@@ -501,7 +523,8 @@
 
 
 
-(def masks (map (fn [[id & rest]] (apply gen-mask id rest)) mask-list))
+(def masks
+  (map (fn [[id & rest]] (apply gen-mask id rest)) mask-list))
 
 
 (def all-filters [turb noiz soft-noiz disappearing splotchy blur])

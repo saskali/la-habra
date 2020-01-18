@@ -1,5 +1,5 @@
 (ns ui.animations
-  (:require [clojure.string :as string :refer [split join]]))
+  (:require [clojure.string :refer [split join]]))
 
 
 ;; ------------------------------------------------------ ;;
@@ -110,7 +110,8 @@
 (make-frames!
   "cent-rot"
   [0 100]
-  (make-body "transform" ["translate(300px, 300px) scale(6.2) rotate(0deg)" "translate(300px, 300px) scale(1.2) rotate(360deg)"]))
+  (make-body "transform" ["translate(300px, 300px) scale(6.2) rotate(0deg)"
+                          "translate(300px, 300px) scale(1.2) rotate(360deg)"]))
 
 (make-frames!
   "rev"
