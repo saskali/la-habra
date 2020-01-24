@@ -5,8 +5,8 @@
             [ui.shapes :refer [tri square pent hex hept oct
                                b1 b2 b3 b4]]
             [ui.fills :refer
-              [gray mint midnight navy blue orange
-                br-orange pink white yellow]]
+              [gray mint navy blue midnight orange pink white yellow
+               blue-set-2]]
             [ui.generators :refer
              [freak-out new-freakout scatter lerp
               gen-circ gen-line gen-poly gen-rect gen-shape draw
@@ -255,6 +255,14 @@
    (gen-group {:style {:animation "scaley 10s infinite"}})
    (atom)))
 
+(def POLYGON
+  (->>
+    (gen-poly (:aquamarine blue-set-2) [100 100 400 400 300 100 200 50])
+    (style {:opacity 0.7})
+    (anim "woosh" "10s" "infinite")
+    (draw)
+    (atom)))
+
 
 ;; ------------------- DRAWING HELPERS ------------------------
 
@@ -356,94 +364,50 @@
 (def l1 (lerp))
 
 (defn cx [frame]
-  (list
+  (let
+    [colors (->> (mapv #(repeat 8 %) [gray midnight orange pink yellow])
+                 (apply concat)
+                 vec)
+     {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2]
 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;;;;;;;;;;;;;;;;;; BACKGROUNDS ;;;;;;;;;;;;;;;;;;;;;;;
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    (let
-      [colors [midnight midnight midnight midnight
-               yellow yellow
-               white white]]
-        ;yellow
-
-
+    (list
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;; BACKGROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (->>
         (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
         (style {:opacity 0.9})
-        (draw)))
+        (draw))
 
-    (when-not (nth-frame 8 frame)
-      (gen-line-grid midnight
-                     4
-                     80 80
-                     {:col 20 :row 20}))
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      (gen-bg-lines dark-green
+                    (mod frame 80)
+                    {:opacity (-> (mod frame 2) (/ 10) (+ 0.6))})
 
-    @new-scale
+      (gen-cols brown-red (mod frame 40) 40 40)
 
-    (->>
-      (gen-circ white
-                (* 0.5 @width)
-                (* 0.5 @height)
-                (val-cyc frame [100 100 100 100 200 200 200 200 200 50 50 50 50 50 200 200 200 200 200 200 200 200 100 100 100 100]))
-      (draw)
-      (when (nth-frame 4 frame)))
+      @POLYGON
 
-    (->>
-      (gen-shape (pattern (:id navy-lines)) oct)
-      (style {:transform (str "translate(70vw, 10vh) scale("
-                              (val-cyc frame [0.5 0.5 0.5 0.5 0.5 0.5 1 1 1 1 1 1 0.9 0.9 0.9 0.9 0.9 0.9])
-                              ")")})
-      (draw)
-      (when (nth-frame 6 frame)))
+      (->>
+        (gen-grid 10 10
+                  {:col 100 :row 100}
+                  (gen-circ orange-red 10 10 10))
+        (map #(style {:opacity 0.7} %))
+        (map draw))
 
-    ;@bb2
-    ;@bb4
-
-    (when (nth-frame 12 frame)
-      (freak-out @width
-                 @height
-                 4
+      (freak-out 1000
                  1000
-                 gray))
+                 10
+                 100
+                 aquamarine
+                 {:opacity 0.5})
 
-    ;(when (nth-frame 6 frame) @b)
-    ;(when (nth-frame 3 frame) @c)
+      (->> (gen-circ orange-red (rand-int 800) (rand-int 800) 20)
+           (draw)
+           (when (nth-frame 2 frame))))))
 
-    ;(when (nth-frame 8 frame) @d)
-    ;(when (nth-frame 6 frame) @e)
-    ;(when (nth-frame 6 frame) @f)
-
-    (when (nth-frame 7 frame) @g)
-
-
-    ; (->>
-    ;   (gen-circ (pattern (:id white-dots)) (* 0.5 @width) (* 0.5 @height) 200)
-    ;   (draw)
-    ;   (when (nth-frame 1 frame)))
-
-    ; (->>
-    ;   (gen-shape pink b2)
-    ;   (style {:transform "translate(20vw, 30vh) scale(2)"})
-    ;   (draw))
-
-    ; (when (nth-frame 4 frame) @b)
-    ; (when (nth-frame 6 frame) @c)
-    ; (when (nth-frame 7 frame) @d)
-
-    ;@bb
-
-    ;@move-me
-    ;@bb2
-
-    ;(doall (map deref levels))
-
-    (when (nth-frame 8 frame)
-      (gen-line-grid midnight
-                     4
-                     80 80
-                     {:col 20 :row 20})))) ; cx end
 
 (when DEBUG
   (defonce collection (atom (cx 1))))
@@ -455,11 +419,11 @@
 (when-not DEBUG
   (defonce start-cx-timer
     (js/setInterval
-      #(reset! collection (cx @frame)) 50))
+      #(reset! collection (cx @frame)) 100))
 
   (defonce start-frame-timer
     (js/setInterval
-      #(swap! frame inc) 500)))
+      #(swap! frame inc) 100)))
 
 
 ;; ----------- DEFS AND DRAW ------------------------------
