@@ -44,8 +44,8 @@
 
 ;; ------------------------ SETTINGS  ---------------------
 
-(def width (atom (.-innerWidth js/window)))
-(def height (atom (.-innerHeight js/window)))
+(def width (atom 1920)) ;;(atom (.-innerWidth js/window)))
+(def height (atom 1080)) ;;(atom (.-innerHeight js/window)))
 
 (def settings {:width @width
                :height @height})
@@ -383,24 +383,24 @@
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (gen-bg-lines dark-green
-                    (mod frame 80)
+                    (mod frame 70)
                     {:opacity (-> (mod frame 2) (/ 10) (+ 0.6))})
 
-      (gen-cols brown-red (mod frame 40) 40 40)
+      (gen-cols brown-red (mod frame 40) 60 60)
 
       @POLYGON
 
       (->>
-        (gen-grid 10 10
+        (gen-grid 20 20
                   {:col 100 :row 100}
-                  (gen-circ orange-red 10 10 10))
+                  (gen-circ orange-red 30 30 10))
         (map #(style {:opacity 0.7} %))
         (map draw))
 
-      (freak-out 1000
-                 1000
+      (freak-out 1920
+                 1080
                  10
-                 100
+                 1000
                  aquamarine
                  {:opacity 0.5})
 
@@ -419,11 +419,11 @@
 (when-not DEBUG
   (defonce start-cx-timer
     (js/setInterval
-      #(reset! collection (cx @frame)) 100))
+      #(reset! collection (cx @frame)) 37.5))
 
   (defonce start-frame-timer
     (js/setInterval
-      #(swap! frame inc) 100)))
+      #(swap! frame inc) 375)))
 
 
 ;; ----------- DEFS AND DRAW ------------------------------
@@ -492,7 +492,7 @@
 
 
 (def all-filters [turb noiz soft-noiz disappearing splotchy blur])
-(def all-fills [gray mint navy blue orange br-orange pink white yellow midnight])
+(def all-fills [gray mint navy blue orange pink white yellow midnight])
 
 
 (defn drawing []
