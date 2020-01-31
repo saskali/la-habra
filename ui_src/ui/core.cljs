@@ -383,25 +383,56 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      (gen-bg-lines dark-green
-                    (mod frame 70)
-                    {:opacity (-> (mod frame 2) (/ 10) (+ 0.6))})
 
-      (gen-cols brown-red (* 6 (mod frame 10)) 60 60)
+      ;;;;;;;;;;;;;;;
+      ;;;; FRAME ;;;;
+      ;;;;;;;;;;;;;;;
 
-      (->>
-        (gen-grid 20 20
-                  {:col 100 :row 100}
-                  (gen-circ orange-red 30 30 (-> (* 10 s) (+ 6))))
-        (map #(style {:opacity 0.7} %))
-        (map draw))
-
-      (freak-out 1920
-                 1080
-                 10
-                 1000
+      ;; left
+      (freak-out (/ @width s)
+                 @height
+                 5
+                 500
                  aquamarine
-                 {:opacity 0.5}))))
+                 {:opacity 0.5})
+
+      ;; top
+      (freak-out @width
+                 (/ @height s)
+                 5
+                 500
+                 aquamarine
+                 {:opacity 0.5})
+
+      ;; right
+      (freak-out (- @width (/ @width s))
+                 @width
+                 0
+                 @height
+                 1
+                 5
+                 500
+                 aquamarine
+                 {:opacity 0.5})
+
+      ;; bottom
+      (freak-out 0
+                 @width
+                 (- @height (/ @height s))
+                 @height
+                 1
+                 5
+                 500
+                 aquamarine
+                 {:opacity 0.5})
+
+
+      ;;;;;;;;;;;;;;;;
+      ;;;; CIRCLE ;;;;
+      ;;;;;;;;;;;;;;;;
+      (->>
+        (gen-circ orange-red (/ @width 2) (/ @height 2) (+ 300 (* 100 s)))
+        (draw)))))
 
 
 (when DEBUG
