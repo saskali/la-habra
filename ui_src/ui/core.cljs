@@ -368,7 +368,8 @@
     [colors (->> (mapv #(repeat 8 %) [gray midnight orange pink yellow])
                  (apply concat)
                  vec)
-     {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2]
+     {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
+     s (->> (/ frame 4) (.sin js/Math) (.abs js/Math))]
 
     (list
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -386,14 +387,12 @@
                     (mod frame 70)
                     {:opacity (-> (mod frame 2) (/ 10) (+ 0.6))})
 
-      (gen-cols brown-red (mod frame 40) 60 60)
-
-      @POLYGON
+      (gen-cols brown-red (* 6 (mod frame 10)) 60 60)
 
       (->>
         (gen-grid 20 20
                   {:col 100 :row 100}
-                  (gen-circ orange-red 30 30 10))
+                  (gen-circ orange-red 30 30 (-> (* 10 s) (+ 6))))
         (map #(style {:opacity 0.7} %))
         (map draw))
 
@@ -402,11 +401,7 @@
                  10
                  1000
                  aquamarine
-                 {:opacity 0.5})
-
-      (->> (gen-circ orange-red (rand-int 800) (rand-int 800) 20)
-           (draw)
-           (when (nth-frame 2 frame))))))
+                 {:opacity 0.5}))))
 
 
 (when DEBUG
