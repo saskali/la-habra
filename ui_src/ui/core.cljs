@@ -520,9 +520,27 @@
 (def all-filters [turb noiz soft-noiz disappearing splotchy blur])
 (def all-fills [gray mint navy blue orange pink white yellow midnight])
 
+(def mix-blend-modes
+  ["luminosity" ;; 0
+   "difference" ;; 1
+   "multiply"   ;; 2
+   "normal"     ;; 3
+   "screen"     ;; 4
+   "overlay"    ;; 5
+   "darken"     ;; 6
+   "lighten"    ;; 7
+   "color-dodge";; 8
+   "color-burn" ;; 9
+   "hard-light" ;; 10
+   "soft-light" ;; 11
+   "exclusion"  ;; 12
+   "hue"        ;; 13
+   "saturation" ;; 14
+   "color"])    ;; 15
 
 (defn drawing []
-  [:svg {:style {:mix-blend-mode (val-cyc @frame ["multiply" "multiply"])}
+  [:svg {:style {:mix-blend-mode (val-cyc @frame (->> (mix-blend-modes 2)
+                                                      (repeat 2)))}
          :width  (:width settings)
          :height (:height settings)}
      ;; filters
