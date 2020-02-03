@@ -183,12 +183,12 @@
 ;; --------------- ATOMS STORAGE --------------------
 
 (def drops
-  (atom  (map
-          #(->>
-            (gen-rect white (+ 30 (* % 160)) 10 200 36)
-            (anim "etof" "1.2s" "infinite" {:delay (str (* 0.5 %) "s")})
-            (draw))
-          (range 10))))
+  (atom (map
+         #(->>
+           (gen-rect white (+ 30 (* % 160)) 10 200 36)
+           (anim "etof" "1.2s" "infinite" {:delay (str (* 0.5 %) "s")})
+           (draw))
+         (range 10))))
 
 
 (def move-me
