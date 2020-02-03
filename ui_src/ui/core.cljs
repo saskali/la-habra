@@ -255,6 +255,18 @@
    (gen-group {:style {:animation "scaley 10s infinite"}})
    (atom)))
 
+(defn moving-triangle [frame color]
+  (->>
+    (gen-shape color tri)
+    (style {:transform-origin "center"
+            :transform (str "translate(40vw, 40vh) rotate("
+                            (val-cyc frame [85 85 85 85 245 245 245 245 -80 -80 -80 -80])
+                            "deg) scale(4)")})
+    (style {:mix-blend-mode "overlay"})
+    (draw)
+    (when (nth-frame 2 frame))
+    (atom)))
+
 (def POLYGON
   (->>
     (gen-poly (:aquamarine blue-set-2) [100 100 400 400 300 100 200 50])
@@ -427,12 +439,10 @@
                  {:opacity 0.5})
 
 
-      ;;;;;;;;;;;;;;;;
-      ;;;; CIRCLE ;;;;
-      ;;;;;;;;;;;;;;;;
-      (->>
-        (gen-circ orange-red (quot @width 2) (quot @height 2) (+ 30 (* 10 s))) ;; (150, 50) (300, 100)
-        (draw)))))
+      ;;;;;;;;;;;;;;;;;;
+      ;;;; TRIANGLE ;;;;
+      ;;;;;;;;;;;;;;;;;;
+      @(moving-triangle frame brown-red))))
 
 
 (when DEBUG
