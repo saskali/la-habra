@@ -369,7 +369,7 @@
                  (apply concat)
                  vec)
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
-     s (->> (/ frame 4) (.sin js/Math) (.abs js/Math))]
+     s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
 
     (list
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -431,7 +431,7 @@
       ;;;; CIRCLE ;;;;
       ;;;;;;;;;;;;;;;;
       (->>
-        (gen-circ orange-red (/ @width 2) (/ @height 2) (+ 300 (* 100 s)))
+        (gen-circ orange-red (quot @width 2) (quot @height 2) (+ 30 (* 10 s))) ;; (150, 50) (300, 100)
         (draw)))))
 
 
