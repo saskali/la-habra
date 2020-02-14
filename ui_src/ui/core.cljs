@@ -193,11 +193,19 @@
 
 (def move-me
   (->>
-   (gen-shape white hept)
-   (style {:opacity 1 :transform-origin "center" :transform "scale(4.4)"})
+   (gen-shape (pattern (:id white-dots)) hept)
+   ;(style {:opacity 1 :transform-origin "center" :transform "scale(4.4)"})
    (anim "woosh" "6s" "infinite")
    (draw)
    (atom)))
+
+(def move-me2
+  (->>
+    (gen-shape (pattern pink) hept)
+    (style {:mix-blend-mode "difference"})
+    (anim "woosh-2" "6s" "infinite")
+    (draw)
+    (atom)))
 
 (def bg
   (->>
@@ -239,6 +247,15 @@
     (draw)
     (atom)))
 
+(def bb6s
+  (->>
+    (gen-shape (pattern (:id pink-dots)) oct)
+    (style {:transform "translate(10vw, 30vh) scale(2.4)"})
+    (style {:mix-blend-mode "color-burn"})
+    (anim "woosh-3" "3s" "infinite")
+    (draw)
+    (atom)))
+
 (def scale-me
   (->>
     (gen-rect (pattern (str "noise-" yellow)) 0 0 @width @height)
@@ -254,6 +271,26 @@
    (style {:transform "translate(10vh, 60vh)"})
    (gen-group {:style {:animation "scaley 10s infinite"}})
    (atom)))
+
+(def sc-circ
+  (->>
+    (gen-circ (pattern (:id orange-lines))
+              (* 0.5 @width)
+              (* 0.4 @height)
+              100)
+    (anim "scaley" "5s" "infinite")
+    (draw)
+    (atom)))
+
+(def mf
+  (->>
+    (gen-shape white tri)
+    (anim "morph" "6s" "infinite")
+    (style {:opacity 0.7
+            :mix-blend-mode "difference"})
+    (draw)
+    (gen-group {:style {:transform-origin "center"
+                        :transform "translate(-2vw, 10vh) scale(4)"}})))
 
 (defn moving-triangle [frame color]
   (->>
@@ -371,9 +408,37 @@
 
 ;(reset! ran {})
 
+(def rr
+  (atom (->> (gen-grid 20
+                       30
+                       {:col 100 :row 150}
+                       (->> (gen-shape mint tri)))
+             ;(map #(style styles %))
+             ; map #(anim "rot" "10s" "infinite" %))
+             (map draw)
+             (map #(gen-group {:style {:transform-origin "center"
+                                       :transform "scale(2)"}} %))
+             (map #(gen-group {:mask (url "bitey")
+                               :style {:transform-origin "center"
+                                       :animation "rot 10s infinite"}} %)))))
 
+(def rr2
+  (atom (->> (gen-grid 20 30
+                       {:col 100 :row 150}
+                       (->> (gen-shape yellow tri)))
+             (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
+             (map #(anim "morph" "5s" "infinite" %))
+             (map draw)
+             (map #(gen-group {:style {:transform-origin "center"
+                                       :transform "scale(2)"}} %))
+             (map #(gen-group {:style {:transform-origin "center"
+                                       :transform "translate(-200px, -100px)"}} %))
+             (map #(gen-group {:style {:transform-origin "center"
+                                       :animation "rot 5s infinite"}})))))
 
 (def l1 (lerp))
+
+(defn cx2 [frame])
 
 (defn cx [frame]
   (let
@@ -399,50 +464,135 @@
       ;;;;;;;;;;;;;;;
       ;;;; FRAME ;;;;
       ;;;;;;;;;;;;;;;
+      @move-me2
+      @move-me
 
-      ;; left
-      (freak-out (/ @width s)
-                 @height
-                 5
-                 500
-                 aquamarine
-                 {:opacity 0.5})
+      (->> (gen-rect mint 0 0 400 600)
+           (style {:mix-blend-mode "difference"
+                   :opacity 0.6})
+           (style {:transform (str "scale("
+                                   (val-cyc frame (concat (repeat 3 1)
+                                                          (repeat 3 2)
+                                                          (repeat 3 4)
+                                                          (repeat 3 6)
+                                                          (repeat 3 8)
+                                                          (repeat 3 20)))
+                                   ")")})
+           (draw)
+           (when (nth-frame 1 frame)))
 
-      ;; top
-      (freak-out @width
-                 (/ @height s)
-                 5
-                 500
-                 aquamarine
-                 {:opacity 0.5})
+      (->> (gen-rect white 400 400 400 500)
+           (style {:mix-blend-mode "difference"
+                   :opacity 0.6})
+           (style {:transform (str "scale("
+                                   (val-cyc frame (concat (repeat 3 1)
+                                                          (repeat 3 0.5)
+                                                          (repeat 3 14)
+                                                          (repeat 3 2)
+                                                          (repeat 3 3)
+                                                          (repeat 3 20)))
+                                   ")")})
+           (draw)
+           (when (nth-frame 1 frame)))
 
-      ;; right
-      (freak-out (- @width (/ @width s))
-                 @width
-                 0
-                 @height
-                 1
-                 5
-                 500
-                 aquamarine
-                 {:opacity 0.5})
+      (->> (gen-rect white 100 600 400 400)
+           (style {:mix-blend-mode "color-dodge"
+                   :opacity 0.6})
+           (style {:transform (str "scale("
+                                   (val-cyc frame (concat (repeat 3 10)
+                                                          (repeat 3 0.5)
+                                                          (repeat 3 2)
+                                                          (repeat 3 2.5)
+                                                          (repeat 3 3)
+                                                          (repeat 3 12)))
+                                   ")")})
+           (draw)
+           (when (nth-frame 1 frame)))
 
-      ;; bottom
-      (freak-out 0
-                 @width
-                 (- @height (/ @height s))
-                 @height
-                 1
-                 5
-                 500
-                 aquamarine
-                 {:opacity 0.5})
+      (when (nth-frame 4 frame)
+        (gen-line-grid pink 2 40 40
+                       {:col 10 :row 10}))
+
+      (when (nth-frame 3 frame)
+        (gen-line-grid orange 4 80 100
+                       {:col 10 :row 10}))
+
+      (when (nth-frame 3 frame)
+        (->> (gen-grid 10 20
+                       {:col 130 :row 120}
+                       (->> (gen-shape blue tri)
+                            ;(map #(style styles %))
+                            ;(map #(anim animations %))
+                            (map draw)
+                            (map #(gen-group {:style {:transform-origin "center"}} %))))))
+
+      (new-freakout @width @height 100 100 "testCirc")
+      (new-freakout @width @height 100 100 "testCirc2")
+      (new-freakout @width @height 100 100 "testCirc3")
+
+      ;(when (nth-frame 3 frame)
+      ;  (gen-line-grid midnight 3 80 80 {:col 20 :row 20}))
+
+      ;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;; GROWING CIRCLE ;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;
+      (->> (gen-circ (pattern (:id white-lines))
+                     (* 0.5 @width) (* 0.5 @height)
+                     200)
+           (style {:transform (str "scale("
+                                   (val-cyc frame (concat (repeat 3 1)
+                                                          (repeat 3 2)
+                                                          (repeat 3 4)
+                                                          (repeat 3 6)
+                                                          (repeat 3 8)
+                                                          (repeat 3 20))))})
+           (style {:mix-blend-mode "difference"})
+           (draw)
+           (when (nth-frame 3 frame)))
+
+      (when (nth-frame 4 frame) @b)
+      (when (nth-frame 2 frame) @c)
+      (when (nth-frame 3 frame) @d)
+
+      (->> (gen-shape yellow tri)
+           (style {:transform-origin "center"
+                   :transform (str "translate(40vw, 40vh) rotate("
+                                   (val-cyc frame
+                                            [80 80 80 80 120 120 120 120 60 -60 60 -60 245 245 245 245])
+                                   "deg) scale(3)")})
+           (style {:mix-blend-mode "overlay"})
+           (draw)
+           (when (nth-frame 4 frame)))
+
+      (gen-group {:style {:transform "translateX(80vw) rotate(30deg)"}}
+                 (->> (gen-shape midnight tri)
+                      (style {:transform-origin "center"
+                              :transform (str "translate(40vw, 40vh rotate("
+                                              (val-cyc frame
+                                                       [10 10 10 10 120 120 120 120 -60 -60 -60 -60 245 245 245 245])
+                                              "deg) scale(3)")})
+                      (style {:mix-blend-mode "overlay"})
+                      (draw)
+                      (when (nth-frame 5 frame))))
+
+      (gen-group {:style {:transform "translate(-30vw, 10vw)"}})
+
+      (->> (gen-shape pink tri)
+           (style {:transform-origin "center"
+                   :transform (str "translate(40vw, 40vh) rotate("
+                                   (val-cyc frame [80 80 80 80 120 120 120 120 -60 -60 -60 -60 245 245 245 245])
+                                   "deg) scale(4)")})
+           (style {:mix-blend-mode "overlay"})
+           (draw)
+           (when (nth-frame 2 frame)))
+
+      (new-freakout @width @height 5 1000 "weeCirc")
+
+      @drops)))
 
 
-      ;;;;;;;;;;;;;;;;;;
-      ;;;; TRIANGLE ;;;;
-      ;;;;;;;;;;;;;;;;;;
-      @(moving-triangle frame brown-red))))
+
+
 
 
 (when DEBUG
@@ -456,6 +606,10 @@
   (defonce start-cx-timer
     (js/setInterval
       #(reset! collection (cx @frame)) 37.5))
+
+  ;(defonce start-cx-timer-2
+  ;  (js/setInterval
+  ;    #(reset! collection (cx2 @frame)) 37.5))
 
   (defonce start-frame-timer
     (js/setInterval
@@ -558,7 +712,20 @@
     ;; masks and patterns
     [:defs
      noise
-     [:circle {:id "testCirc" :cx 0 :cy 0 :r 100 :fill (pattern (str "noise-" white))}]
+     [:circle {:id "weeCirc"
+               :cx 0 :cy 0 :r 4
+               :style {:animation "colorcolor 100s infinite"
+                       :opacity 0.6}}]
+     [:circle {:id "testCirc"
+               :cx 0 :cy 0 :r 100
+               :fill (pattern (str "noise-" white))}]
+     [:circle {:id "testCirc2"
+               :cx 0 :cy 0 :r 100
+               :fill (pattern (str "noise-" mint))}]
+     [:circle {:id "testCirc3"
+               :cx 0 :cy 0 :r 100
+               :style {:animation "colorcolorcolor 100s infinite"
+                       :fill (pattern (str "noise-" yellow))}}]
      (map identity gradients)
      (map identity masks)
      (map gen-color-noise all-fills)
