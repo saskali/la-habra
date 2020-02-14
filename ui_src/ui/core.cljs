@@ -681,6 +681,7 @@
   (map (fn [[id & rest]] (apply gen-mask id rest)) mask-list))
 
 
+;; TODO update
 (def all-filters [turb noiz soft-noiz disappearing splotchy blur])
 (def all-fills [gray mint navy blue orange pink white yellow midnight])
 
@@ -702,9 +703,18 @@
    "saturation" ;; 14
    "color"])    ;; 15
 
+(defn set-mode [index freq]
+  (->> (mix-blend-modes index)
+       (repeat freq)))
+
+(defn set-all-modes [modes]
+  (-> (map (fn [[index freq]]
+             (set-mode index freq))
+           modes)
+      flatten))
+
 (defn drawing []
-  [:svg {:style {:mix-blend-mode (val-cyc @frame (->> (mix-blend-modes 2)
-                                                      (repeat 2)))}
+  [:svg {:style {:mix-blend-mode (val-cyc @frame (set-all-modes [[0 2] [2 3] [1 3]]))}
          :width  (:width settings)
          :height (:height settings)}
      ;; filters
