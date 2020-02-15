@@ -433,14 +433,16 @@
                                           "scale(60) translate(-20vh, -20vh)")}} %)))
    (atom)))
 
-(defonce b
-  (scatter 10 (->>
-               (gen-circ navy 10 10 60)
+(defonce splash-yellow
+  (scatter 20 (->>
+               (gen-circ yellow 10 10 20)
+               (style {:opacity 0.4})
                (draw))))
 
-(defonce c
-  (scatter 10 (->>
-               (gen-circ navy 10 10 60)
+(defonce splash-gray
+  (scatter 20 (->>
+               (gen-circ gray 10 10 20)
+               (style {:opacity 0.4})
                (draw))))
 
 (defonce d
@@ -540,9 +542,9 @@
       @anim-hept2-mint
       @anim-hept2-white-dots
 
-      ;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;; OVERLAY RECTANGLES;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;; OVERLAY RECTANGLES ;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;
       (->> (gen-rect mint 0 0 400 600)
            (style {:mix-blend-mode "difference"
                    :opacity 0.6})
@@ -565,7 +567,28 @@
                                                           (repeat 3 4)))
                                    ")")})
            (draw)
-           (when (nth-frame 1 frame))))))
+           (when (nth-frame 1 frame)))
+
+      ;;;;;;;;;;;;;;
+      ;;; SPLASH ;;;
+      ;;;;;;;;;;;;;;
+      (when (and (nth-frame 4 frame)
+                 (nth-frame 3 frame)) @splash-yellow)
+
+      (when (nth-frame 5 frame) @splash-gray)
+
+      ;;;;;;;;;;;;
+      ;;; GRID ;;;
+      ;;;;;;;;;;;;
+      (when (nth-frame 4 frame)
+        (gen-line-grid pink 6 80 80
+                       {:col 200 :row 200}))
+
+      ;;;;;;;;;;;;;;;;;;;;;;;
+      ;;; FREAKOUT CIRCLE ;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;
+      (when (nth-frame 3 frame)
+        (new-freakout @width @height 100 100 "testCirc2")))))
 
 
 (when DEBUG
