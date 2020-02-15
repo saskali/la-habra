@@ -143,6 +143,36 @@
                            "translate(50vw, 30vh) rotate(-300deg) scale(2.2)"
                            "translate(60vw, 80vh) rotate(400deg) scale(1.2)"]))
 
+(make-frames!
+  "woosh-5"
+  [30, 90]
+  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(1.2)"
+                          "translate(45vw, 45vh) rotate(-200deg) scale(1.8)"]))
+
+(make-frames!
+  "woosh-6"
+  [30, 90]
+  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(0.6)"
+                          "translate(45vw, 45vh) rotate(-200deg) scale(1.8)"]))
+
+(make-frames!
+  "woosh-7"
+  [30, 90]
+  (make-body "transform" ["translate(20vw, 80vh) rotate(20deg) scale(0.6)"
+                          "translate(55vw, 60vh) rotate(-200deg) scale(1.8)"]))
+
+(make-frames!
+  "woosh-8"
+  [30, 90]
+  (make-body "transform" ["translate(20vw, 80vh) rotate(2deg) scale(0.6)"
+                          "translate(55vw, 60vh) rotate(-200deg) scale(2.4)"]))
+
+(make-frames!
+  "woosh-9"
+  [30, 90]
+  (make-body "transform" ["translate(20vw, 80vh) rotate(2deg) scale(0.6)"
+                          "translate(55vw, 60vh) rotate(-200deg) scale(2.4)"]))
+
 
 (make-frames!
   "loopy-left"
@@ -194,8 +224,8 @@
 (def move-me
   (->>
    (gen-shape (pattern (:id white-dots)) hept)
-   ;(style {:opacity 1 :transform-origin "center" :transform "scale(4.4)"})
-   (anim "woosh" "6s" "infinite")
+   (style {:transform-origin "center" :transform "scale(1.4)"})
+   (anim "woosh-5" "4s" "infinite")
    (draw)
    (atom)))
 
@@ -203,7 +233,39 @@
   (->>
     (gen-shape (pattern pink) hept)
     (style {:mix-blend-mode "difference"})
-    (anim "woosh-2" "6s" "infinite")
+    (anim "woosh-5" "4s" "infinite")
+    (draw)
+    (atom)))
+
+(def move-me3
+  (->>
+    (gen-shape mint hept)
+    (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
+    (anim "woosh-6" "4s" "infinite")
+    (draw)
+    (atom)))
+
+(def move-me-mirrored
+  (->>
+    (gen-shape (pattern (:id white-dots)) hept)
+    (style {:transform-origin "center" :transform "scale(1.4)"})
+    (anim "woosh-7" "4s" "infinite")
+    (draw)
+    (atom)))
+
+(def move-me2-mirrored
+  (->>
+    (gen-shape mint hept)
+    (style {:mix-blend-mode "difference"})
+    (anim "woosh-8" "4s" "infinite")
+    (draw)
+    (atom)))
+
+(def move-me3-mirrored
+  (->>
+    (gen-shape (pattern pink) hept)
+    (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
+    (anim "woosh-9" "4s" "infinite")
     (draw)
     (atom)))
 
@@ -464,135 +526,13 @@
       ;;;;;;;;;;;;;;;
       ;;;; FRAME ;;;;
       ;;;;;;;;;;;;;;;
+      @move-me3
       @move-me2
       @move-me
 
-      (->> (gen-rect mint 0 0 400 600)
-           (style {:mix-blend-mode "difference"
-                   :opacity 0.6})
-           (style {:transform (str "scale("
-                                   (val-cyc frame (concat (repeat 3 1)
-                                                          (repeat 3 2)
-                                                          (repeat 3 4)
-                                                          (repeat 3 6)
-                                                          (repeat 3 8)
-                                                          (repeat 3 20)))
-                                   ")")})
-           (draw)
-           (when (nth-frame 1 frame)))
-
-      (->> (gen-rect white 400 400 400 500)
-           (style {:mix-blend-mode "difference"
-                   :opacity 0.6})
-           (style {:transform (str "scale("
-                                   (val-cyc frame (concat (repeat 3 1)
-                                                          (repeat 3 0.5)
-                                                          (repeat 3 14)
-                                                          (repeat 3 2)
-                                                          (repeat 3 3)
-                                                          (repeat 3 20)))
-                                   ")")})
-           (draw)
-           (when (nth-frame 1 frame)))
-
-      (->> (gen-rect white 100 600 400 400)
-           (style {:mix-blend-mode "color-dodge"
-                   :opacity 0.6})
-           (style {:transform (str "scale("
-                                   (val-cyc frame (concat (repeat 3 10)
-                                                          (repeat 3 0.5)
-                                                          (repeat 3 2)
-                                                          (repeat 3 2.5)
-                                                          (repeat 3 3)
-                                                          (repeat 3 12)))
-                                   ")")})
-           (draw)
-           (when (nth-frame 1 frame)))
-
-      (when (nth-frame 4 frame)
-        (gen-line-grid pink 2 40 40
-                       {:col 10 :row 10}))
-
-      (when (nth-frame 3 frame)
-        (gen-line-grid orange 4 80 100
-                       {:col 10 :row 10}))
-
-      (when (nth-frame 3 frame)
-        (->> (gen-grid 10 20
-                       {:col 130 :row 120}
-                       (->> (gen-shape blue tri)
-                            ;(map #(style styles %))
-                            ;(map #(anim animations %))
-                            (map draw)
-                            (map #(gen-group {:style {:transform-origin "center"}} %))))))
-
-      (new-freakout @width @height 100 100 "testCirc")
-      (new-freakout @width @height 100 100 "testCirc2")
-      (new-freakout @width @height 100 100 "testCirc3")
-
-      ;(when (nth-frame 3 frame)
-      ;  (gen-line-grid midnight 3 80 80 {:col 20 :row 20}))
-
-      ;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;; GROWING CIRCLE ;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;
-      (->> (gen-circ (pattern (:id white-lines))
-                     (* 0.5 @width) (* 0.5 @height)
-                     200)
-           (style {:transform (str "scale("
-                                   (val-cyc frame (concat (repeat 3 1)
-                                                          (repeat 3 2)
-                                                          (repeat 3 4)
-                                                          (repeat 3 6)
-                                                          (repeat 3 8)
-                                                          (repeat 3 20))))})
-           (style {:mix-blend-mode "difference"})
-           (draw)
-           (when (nth-frame 3 frame)))
-
-      (when (nth-frame 4 frame) @b)
-      (when (nth-frame 2 frame) @c)
-      (when (nth-frame 3 frame) @d)
-
-      (->> (gen-shape yellow tri)
-           (style {:transform-origin "center"
-                   :transform (str "translate(40vw, 40vh) rotate("
-                                   (val-cyc frame
-                                            [80 80 80 80 120 120 120 120 60 -60 60 -60 245 245 245 245])
-                                   "deg) scale(3)")})
-           (style {:mix-blend-mode "overlay"})
-           (draw)
-           (when (nth-frame 4 frame)))
-
-      (gen-group {:style {:transform "translateX(80vw) rotate(30deg)"}}
-                 (->> (gen-shape midnight tri)
-                      (style {:transform-origin "center"
-                              :transform (str "translate(40vw, 40vh rotate("
-                                              (val-cyc frame
-                                                       [10 10 10 10 120 120 120 120 -60 -60 -60 -60 245 245 245 245])
-                                              "deg) scale(3)")})
-                      (style {:mix-blend-mode "overlay"})
-                      (draw)
-                      (when (nth-frame 5 frame))))
-
-      (gen-group {:style {:transform "translate(-30vw, 10vw)"}})
-
-      (->> (gen-shape pink tri)
-           (style {:transform-origin "center"
-                   :transform (str "translate(40vw, 40vh) rotate("
-                                   (val-cyc frame [80 80 80 80 120 120 120 120 -60 -60 -60 -60 245 245 245 245])
-                                   "deg) scale(4)")})
-           (style {:mix-blend-mode "overlay"})
-           (draw)
-           (when (nth-frame 2 frame)))
-
-      (new-freakout @width @height 5 1000 "weeCirc")
-
-      @drops)))
-
-
-
-
+      @move-me3-mirrored
+      @move-me2-mirrored
+      @move-me-mirrored)))
 
 
 (when DEBUG
