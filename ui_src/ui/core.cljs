@@ -145,33 +145,39 @@
 
 (make-frames!
   "woosh-5"
-  [30, 90]
+  [20, 40, 60, 80, 100]
   (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(1.2)"
-                          "translate(45vw, 45vh) rotate(-200deg) scale(1.8)"]))
+                          "translate(45vw, 45vh) rotate(-200deg) scale(1.8)"
+                          "translate(80vw, 80vh) rotate(0deg) scale(4.2)"
+                          "translate(60vw, 20vh) rotate(-300deg) scale(2.4)"
+                          "translate(20vw, 40vh) rotate(0deg) scale(1.8)"]))
 
 (make-frames!
   "woosh-6"
-  [30, 90]
+  [20, 40, 60, 80, 100]
   (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(0.6)"
-                          "translate(45vw, 45vh) rotate(-200deg) scale(1.8)"]))
+                          "translate(45vw, 45vh) rotate(-200deg) scale(2.2)"
+                          "translate(80vw, 80vh) rotate(0deg) scale(3.8)"
+                          "translate(60vw, 20vh) rotate(-300deg) scale(3.2)"
+                          "translate(20vw, 40vh) rotate(0deg) scale(2.2)"]))
 
 (make-frames!
   "woosh-7"
-  [30, 90]
-  (make-body "transform" ["translate(20vw, 80vh) rotate(20deg) scale(0.6)"
-                          "translate(55vw, 60vh) rotate(-200deg) scale(1.8)"]))
+  [20, 40, 60, 80, 100]
+  (make-body "transform" ["translate(20vw, 80vh) rotate(20deg) scale(0.4)"
+                          "translate(55vw, 60vh) rotate(-200deg) scale(1.6)"
+                          "translate(70vw, 70vh) rotate(0deg) scale(4.2)"
+                          "translate(80vw, 45vh) rotate(-300deg) scale(2.2)"
+                          "translate(10vw, 50vh) rotate(0deg) scale(2.2)"]))
 
 (make-frames!
   "woosh-8"
-  [30, 90]
-  (make-body "transform" ["translate(20vw, 80vh) rotate(2deg) scale(0.6)"
-                          "translate(55vw, 60vh) rotate(-200deg) scale(2.4)"]))
-
-(make-frames!
-  "woosh-9"
-  [30, 90]
-  (make-body "transform" ["translate(20vw, 80vh) rotate(2deg) scale(0.6)"
-                          "translate(55vw, 60vh) rotate(-200deg) scale(2.4)"]))
+  [20, 40, 60, 80, 100]
+  (make-body "transform" ["translate(20vw, 80vh) rotate(2deg) scale(0.8)"
+                          "translate(55vw, 60vh) rotate(-200deg) scale(2)"
+                          "translate(70vw, 70vh) rotate(0deg) scale(4.4)"
+                          "translate(80vw, 45vh) rotate(-300deg) scale(2.2)"
+                          "translate(10vw, 50vh) rotate(0deg) scale(2.2)"]))
 
 
 (make-frames!
@@ -265,7 +271,7 @@
   (->>
     (gen-shape (pattern pink) hept)
     (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
-    (anim "woosh-9" "4s" "infinite")
+    (anim "woosh-8" "4s" "infinite")
     (draw)
     (atom)))
 
@@ -504,7 +510,7 @@
 
 (defn cx [frame]
   (let
-    [colors (->> (mapv #(repeat 8 %) [gray midnight orange pink yellow])
+    [colors (->> (mapv #(repeat 10 %) [midnight orange pink yellow])
                  (apply concat)
                  vec)
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
@@ -654,7 +660,7 @@
       flatten))
 
 (defn drawing []
-  [:svg {:style {:mix-blend-mode (val-cyc @frame (set-all-modes [[0 2] [2 3] [1 3]]))}
+  [:svg {:style {:mix-blend-mode (val-cyc @frame (set-all-modes [[2 3] [1 3]]))}
          :width  (:width settings)
          :height (:height settings)}
      ;; filters
