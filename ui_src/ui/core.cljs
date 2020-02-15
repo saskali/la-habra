@@ -538,7 +538,34 @@
 
       @anim-hept2-pink
       @anim-hept2-mint
-      @anim-hept2-white-dots)))
+      @anim-hept2-white-dots
+
+      ;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;; OVERLAY RECTANGLES;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;
+      (->> (gen-rect mint 0 0 400 600)
+           (style {:mix-blend-mode "difference"
+                   :opacity 0.6})
+           (style {:transform (str "scale("
+                                   (val-cyc frame (concat (repeat 3 4)
+                                                          (repeat 3 6)
+                                                          (repeat 3 8)
+                                                          (repeat 3 20)))
+                                   ")")})
+           (draw)
+           (when (nth-frame 1 frame)))
+
+      (->> (gen-rect pink 0 0 400 600)
+           (style {:mix-blend-mode "difference"
+                   :opacity 0.6})
+           (style {:transform (str "scale("
+                                   (val-cyc frame (concat (repeat 3 20)
+                                                          (repeat 3 8)
+                                                          (repeat 3 6)
+                                                          (repeat 3 4)))
+                                   ")")})
+           (draw)
+           (when (nth-frame 1 frame))))))
 
 
 (when DEBUG
