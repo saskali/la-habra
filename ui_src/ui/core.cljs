@@ -227,7 +227,7 @@
          (range 10))))
 
 
-(def move-me
+(def anim-hept1-white-dots
   (->>
    (gen-shape (pattern (:id white-dots)) hept)
    (style {:transform-origin "center" :transform "scale(1.4)"})
@@ -235,7 +235,7 @@
    (draw)
    (atom)))
 
-(def move-me2
+(def anim-hept1-pink
   (->>
     (gen-shape (pattern pink) hept)
     (style {:mix-blend-mode "difference"})
@@ -243,7 +243,7 @@
     (draw)
     (atom)))
 
-(def move-me3
+(def anim-hept1-mint
   (->>
     (gen-shape mint hept)
     (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
@@ -251,7 +251,7 @@
     (draw)
     (atom)))
 
-(def move-me-mirrored
+(def anim-hept2-white-dots
   (->>
     (gen-shape (pattern (:id white-dots)) hept)
     (style {:transform-origin "center" :transform "scale(1.4)"})
@@ -259,7 +259,7 @@
     (draw)
     (atom)))
 
-(def move-me2-mirrored
+(def anim-hept2-mint
   (->>
     (gen-shape mint hept)
     (style {:mix-blend-mode "difference"})
@@ -267,7 +267,7 @@
     (draw)
     (atom)))
 
-(def move-me3-mirrored
+(def anim-hept2-pink
   (->>
     (gen-shape (pattern pink) hept)
     (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
@@ -529,16 +529,16 @@
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;;;;;;;;;;;;;;;
-      ;;;; FRAME ;;;;
-      ;;;;;;;;;;;;;;;
-      @move-me3
-      @move-me2
-      @move-me
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;; MOVING HEPTAGONS ;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;
+      @anim-hept1-mint
+      @anim-hept1-pink
+      @anim-hept1-white-dots
 
-      @move-me3-mirrored
-      @move-me2-mirrored
-      @move-me-mirrored)))
+      @anim-hept2-pink
+      @anim-hept2-mint
+      @anim-hept2-white-dots)))
 
 
 (when DEBUG
