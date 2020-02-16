@@ -615,7 +615,16 @@
       ;;;;;;;;;;;;;;;;
       ;;; FREAKOUT ;;;
       ;;;;;;;;;;;;;;;;
-      (freak-out-waves s aquamarine))))
+      (freak-out-waves s aquamarine)
+
+      (->> (gen-shape gray tri)
+           (style {:transform-origin "center"
+                   :transform (str "translate(40vw, 40vh) rotate("
+                                   (val-cyc frame
+                                            [80 80 80 80 120 120 120 120 60 -60 60 -60 245 245 245 245])
+                                   "deg) scale(0.4)")})
+           (draw)
+           (when (nth-frame 4 frame))))))
 
 
 (when DEBUG
