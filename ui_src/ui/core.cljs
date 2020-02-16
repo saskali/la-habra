@@ -506,13 +506,81 @@
              (map #(gen-group {:style {:transform-origin "center"
                                        :animation "rot 5s infinite"}})))))
 
+(defn freak-out-waves [s color]
+  ;; left
+  (freak-out (/ @width s)
+             @height
+             5
+             500
+             color
+             {:opacity 0.5})
+
+  ;; top
+  (freak-out @width
+             (/ @height s)
+             5
+             500
+             color
+             {:opacity 0.5})
+
+  ;; right
+  (freak-out (- @width (/ @width s))
+             @width
+             0
+             @height
+             1
+             5
+             500
+             color
+             {:opacity 0.5})
+
+  ;; bottom
+  (freak-out 0
+             @width
+             (- @height (/ @height s))
+             @height
+             1
+             5
+             500
+             color
+             {:opacity 0.5}))
+
+(defn moving-rects-horizontal [frame speed]
+  (->> (gen-rect mint 0 0 200 1080)
+       (style {:mix-blend-mode "difference"
+               :opacity 0.6})
+       (style {:transform (str "scaleX("
+                               (val-cyc frame (concat (repeat speed 4)
+                                                      (repeat speed 6)
+                                                      (repeat speed 8)
+                                                      (repeat speed 10)
+                                                      (repeat speed 12)
+                                                      (repeat speed 14)))
+                               ")")})
+       (draw)
+       (when (nth-frame 1 frame))))
+
+(defn moving-rects-vertical [frame speed]
+  (->> (gen-rect pink 0 0 1920 200)
+       (style {:mix-blend-mode "difference"
+               :opacity 0.6})
+       (style {:transform (str "scaleY("
+                               (val-cyc frame (concat (repeat speed 10)
+                                                      (repeat speed 8)
+                                                      (repeat speed 6)
+                                                      (repeat speed 4)
+                                                      (repeat speed 2)))
+                               ")")})
+       (draw)
+       (when (nth-frame 1 frame))))
+
 (def l1 (lerp))
 
 (defn cx2 [frame])
 
 (defn cx [frame]
   (let
-    [colors (->> (mapv #(repeat 10 %) [midnight orange pink yellow])
+    [colors (->> (mapv #(repeat 4 %) [midnight orange pink yellow])
                  (apply concat)
                  vec)
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
@@ -532,63 +600,15 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;; MOVING HEPTAGONS ;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;
-      @anim-hept1-mint
-      @anim-hept1-pink
-      @anim-hept1-white-dots
-
-      @anim-hept2-pink
-      @anim-hept2-mint
-      @anim-hept2-white-dots
-
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;; OVERLAY RECTANGLES ;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;
-      (->> (gen-rect mint 0 0 400 600)
-           (style {:mix-blend-mode "difference"
-                   :opacity 0.6})
-           (style {:transform (str "scale("
-                                   (val-cyc frame (concat (repeat 3 4)
-                                                          (repeat 3 6)
-                                                          (repeat 3 8)
-                                                          (repeat 3 20)))
-                                   ")")})
-           (draw)
-           (when (nth-frame 1 frame)))
+      (moving-rects-horizontal frame 2)
+      (moving-rects-vertical frame 2)
 
-      (->> (gen-rect pink 0 0 400 600)
-           (style {:mix-blend-mode "difference"
-                   :opacity 0.6})
-           (style {:transform (str "scale("
-                                   (val-cyc frame (concat (repeat 3 20)
-                                                          (repeat 3 8)
-                                                          (repeat 3 6)
-                                                          (repeat 3 4)))
-                                   ")")})
-           (draw)
-           (when (nth-frame 1 frame)))
-
-      ;;;;;;;;;;;;;;
-      ;;; SPLASH ;;;
-      ;;;;;;;;;;;;;;
-      (when (and (nth-frame 4 frame)
-                 (nth-frame 3 frame)) @splash-yellow)
-
-      (when (nth-frame 5 frame) @splash-gray)
-
-      ;;;;;;;;;;;;
-      ;;; GRID ;;;
-      ;;;;;;;;;;;;
-      (when (nth-frame 4 frame)
-        (gen-line-grid pink 6 80 80
-                       {:col 200 :row 200}))
-
-      ;;;;;;;;;;;;;;;;;;;;;;;
-      ;;; FREAKOUT CIRCLE ;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;
-      (when (nth-frame 3 frame)
-        (new-freakout @width @height 100 100 "testCirc2")))))
+      ;;;;;;;;;;;;;;;;
+      ;;; FREAKOUT ;;;
+      ;;;;;;;;;;;;;;;;
+      (freak-out-waves s aquamarine))))
 
 
 (when DEBUG
