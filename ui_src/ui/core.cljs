@@ -545,34 +545,41 @@
              color
              {:opacity 0.5}))
 
-(defn moving-rects-horizontal [frame speed]
-  (->> (gen-rect mint 0 0 200 1080)
-       (style {:mix-blend-mode "difference"
-               :opacity 0.6})
-       (style {:transform (str "scaleX("
-                               (val-cyc frame (concat (repeat speed 4)
-                                                      (repeat speed 6)
-                                                      (repeat speed 8)
-                                                      (repeat speed 10)
-                                                      (repeat speed 12)
-                                                      (repeat speed 14)))
-                               ")")})
-       (draw)
-       (when (nth-frame 1 frame))))
+(def fib-seq
+  ((fn fib [a b]
+     (lazy-seq (cons a (fib b (+ a b)))))
+   0 1))
 
-(defn moving-rects-vertical [frame speed]
-  (->> (gen-rect pink 0 0 1920 200)
-       (style {:mix-blend-mode "difference"
-               :opacity 0.6})
-       (style {:transform (str "scaleY("
-                               (val-cyc frame (concat (repeat speed 10)
-                                                      (repeat speed 8)
-                                                      (repeat speed 6)
-                                                      (repeat speed 4)
-                                                      (repeat speed 2)))
-                               ")")})
-       (draw)
-       (when (nth-frame 1 frame))))
+(defn get-scaling-factors [speed partitions]
+  (->> fib-seq
+       (drop 3)
+       (take partitions)
+       (map #(repeat speed %))
+       (apply concat)))
+
+(defn moving-rects-horizontal [frame speed partitions]
+  (let [scales (get-scaling-factors speed partitions)
+        largest-scaling-factor (last scales)]
+    (->> (gen-rect mint 0 0 (quot @width largest-scaling-factor) @height)
+         (style {:mix-blend-mode "difference"
+                 :opacity 0.6})
+         (style {:transform (str "scaleX("
+                                 (val-cyc frame scales)
+                                 ")")})
+         (draw)
+         (when (nth-frame 1 frame)))))
+
+(defn moving-rects-vertical [frame speed partitions]
+  (let [scales (get-scaling-factors speed partitions)
+        largest-scaling-factor (last scales)]
+    (->> (gen-rect pink 0 0 @width (quot @height largest-scaling-factor))
+         (style {:mix-blend-mode "difference"
+                 :opacity 0.6})
+         (style {:transform (str "scaleY("
+                                 (val-cyc frame scales)
+                                 ")")})
+         (draw)
+         (when (nth-frame 1 frame)))))
 
 (def l1 (lerp))
 
@@ -602,8 +609,8 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;; OVERLAY RECTANGLES ;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;
-      (moving-rects-horizontal frame 2)
-      (moving-rects-vertical frame 2)
+      (moving-rects-vertical frame 4 8)
+      (moving-rects-horizontal frame 4 8)
 
       ;;;;;;;;;;;;;;;;
       ;;; FREAKOUT ;;;
