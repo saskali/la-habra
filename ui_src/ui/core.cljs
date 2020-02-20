@@ -651,9 +651,9 @@
 ;; ----------- DEFS AND DRAW ------------------------------
 
 (def gradients
-  [[:linearGradient {:id "grad" :key (random-uuid)}]
-   [:stop { :offset "0" :stop-color "white" :stop-opacity "0"}]
-   [:stop { :offset "1" :stop-color "white" :stop-opacity "1"}]])
+  [[:linearGradient {:key (random-uuid) :id "grad"}]
+   [:stop {:key (random-uuid) :offset "0" :stop-color "white" :stop-opacity "0"}]
+   [:stop {:key (random-uuid) :offset "1" :stop-color "white" :stop-opacity "1"}]])
 
 (def mask-list
   [["poly-mask" [:path {:d b2
