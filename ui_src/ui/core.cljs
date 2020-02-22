@@ -610,34 +610,64 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; BACKGROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      (->>
-        (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
-        (style {:opacity 0.9})
-        (draw))
+      (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
+           ;(style {:opacity 0.9})
+           (draw))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;; OVERLAY RECTANGLES ;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;
-      (moving-rects-vertical frame 4 8)
-      (moving-rects-horizontal frame 4 8)
+      ;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;; EARTH ;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;;;;;;;;;;;;;;;;
-      ;;; FREAKOUT ;;;
-      ;;;;;;;;;;;;;;;;
-      (freak-out-waves s aquamarine)
+      ;;;;;;;;;;;;;;
+      ;;; GROUND ;;;
+      ;;;;;;;;;;;;;;
+      (->> (gen-circ (val-cyc frame (->> (vals blue-set-2)
+                                         (slow-val-cyc 140)))
+                     (* 0.5 @width)
+                     (* 1.4 @height)
+                     (+ 500 (* 10 (mod frame 140))))
+           (draw))
+    
+      (->> (gen-circ gray (* 0.5 @width) (* 1.4 @height) (-> s (* 60) (+ 600)))
+           (draw)) ;;;; 1.4 - 1.3 - 1.2 - 1.1
 
-      (->> (gen-shape gray tri)
-           (style {:transform-origin "center"
-                   :transform (str "translate(40vw, 40vh) rotate("
-                                   (val-cyc frame
-                                            [80 80 80 80 120 120 120 120 60 -60 60 -60 245 245 245 245])
-                                   "deg) scale(0.4)")})
-           (draw)
-           (when (nth-frame 4 frame))))))
+      ;;;;;;;;;;;;;;;;;;
+      ;;; SUN-SHAPES ;;;
+      ;;;;;;;;;;;;;;;;;;
+      (map (fn [[x y]]
+             (sun-shape gray x y {} (val-cyc frame (->> (range 1 10)
+                                                        (slow-val-cyc 140)))))
+           [[360 200] [660 300] [960 200] [1260 300] [1560 200]
+            [960 500] [460 500] [1460 500]
+            [700 700] [1200 700]]))))
+
+
+      ;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;; WATER ;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;
+
+      ;(moving-rects-vertical frame 2 8)
+      ;(moving-rects-horizontal frame 2 8))))
+
+
+      ;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;; FIRE ;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;
+
+
+      ;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;; AIR ;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;
+
+
+      ;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;; ETHER ;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;
+
 
 
 (when DEBUG
@@ -759,7 +789,7 @@
       flatten))
 
 (defn drawing []
-  [:svg {:style {:mix-blend-mode (val-cyc @frame (set-all-modes [[2 3] [1 3]]))}
+  [:svg {:style {:mix-blend-mode (val-cyc @frame (set-all-modes [[3 3]]))}
          :width  (:width settings)
          :height (:height settings)}
      ;; filters
