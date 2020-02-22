@@ -15,3 +15,9 @@
   [frame vals]
   (let [n (count vals)]
     (nth vals (mod frame n))))
+
+(defn slow-val-cyc
+  [num vals]
+  (->> (mapv #(repeat num %) vals)
+       (apply concat)
+       vec))
