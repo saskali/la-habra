@@ -687,25 +687,25 @@
 
    ["rect-buds" (->>
                   (gen-rect white 10 12 (* 0.3 @width) (* 0.5 @height))
-                  (draw))]
+                  (draw))]])
 
-   ["na" [:image {:key (random-uuid)
-                  :x "0"
-                  :y "0"
-                  :width "100%"
-                  :height "100%"
-                  :xlinkHref "img/blop.png"
-                  :style {:transform-origin "center"
-                          :transform "scale(2)"}}]]
-   ["nn" [:image {:key (random-uuid)
-                  :x "100"
-                  :y "200"
-                  :width "100%"
-                  :height "100%"
-                  :xlinkHref "img/blop.png"
-                  :style {:transform-origin "center"
-                          :transform "scale(10)"
-                          :animation "woosh 6s infinite"}}]]])
+   ;["na" [:image {:key (random-uuid)
+   ;               :x "0"
+   ;               :y "0"
+   ;               :width "100%"
+   ;               :height "100%"
+   ;               :xlinkHref "img/blop.png"
+   ;               :style {:transform-origin "center"
+   ;                       :transform "scale(2)"}}]]
+   ;["nn" [:image {:key (random-uuid)
+   ;               :x "100"
+   ;               :y "200"
+   ;               :width "100%"
+   ;               :height "100%"
+   ;               :xlinkHref "img/blop.png"
+   ;               :style {:transform-origin "center"
+   ;                       :transform "scale(10)"
+   ;                       :animation "woosh 6s infinite"}}]]])
 
 
 
