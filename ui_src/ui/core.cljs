@@ -1,7 +1,7 @@
 (ns ui.core
   (:require [reagent.core :as r]
             [clojure.string  :refer [split-lines split join]]
-            [ui.helpers :refer [cos sin style url val-cyc]]
+            [ui.helpers :refer [cos sin style url val-cyc slow-val-cyc]]
             [ui.shapes :refer [tri square pent hex hept oct
                                b1 b2 b3 b4]]
             [ui.fills :refer
@@ -581,15 +581,28 @@
          (draw)
          (when (nth-frame 1 frame)))))
 
+(defn sun-shape [color base-x base-y style cycle]
+  (map (fn [[x y r]]
+         (->> (gen-circ color x y r)
+              (style style)
+              (draw)))
+       (take cycle [[base-x (- base-y 80) 18]
+                    [(+ base-x 50) (- base-y 50) 14]
+                    [(+ 80 base-x) base-y 18]
+                    [(+ base-x 50) (+ base-y 55) 14]
+                    [base-x (+ 80 base-y) 18]
+                    [(- base-x 55) (+ base-y 55) 14]
+                    [(- base-x 80) base-y 18]
+                    [(- base-x 55) (- base-y 50) 14]
+                    [base-x base-y 40]])))
+
 (def l1 (lerp))
 
 (defn cx2 [frame])
 
 (defn cx [frame]
   (let
-    [colors (->> (mapv #(repeat 4 %) [midnight orange pink yellow])
-                 (apply concat)
-                 vec)
+    [colors (slow-val-cyc 12 [midnight]);; orange pink yellow
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
      s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
 
