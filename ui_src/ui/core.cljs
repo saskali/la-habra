@@ -1,5 +1,5 @@
 (ns ui.core
-  (:require [reagent.core :as reagent :refer [atom]]
+  (:require [reagent.core :as r]
             [clojure.string  :refer [split-lines split join]]
             [ui.helpers :refer [cos sin style url val-cyc]]
             [ui.shapes :refer [tri square pent hex hept oct
@@ -44,8 +44,8 @@
 
 ;; ------------------------ SETTINGS  ---------------------
 
-(def width (atom 1920)) ;;(atom (.-innerWidth js/window)))
-(def height (atom 1080)) ;;(atom (.-innerHeight js/window)))
+(def width (r/atom 1920)) ;;(atom (.-innerWidth js/window)))
+(def height (r/atom 1080)) ;;(atom (.-innerHeight js/window)))
 
 (def settings {:width @width
                :height @height})
@@ -219,12 +219,12 @@
 ;; --------------- ATOMS STORAGE --------------------
 
 (def drops
-  (atom (map
-         #(->>
-           (gen-rect white (+ 30 (* % 160)) 10 200 36)
-           (anim "etof" "1.2s" "infinite" {:delay (str (* 0.5 %) "s")})
-           (draw))
-         (range 10))))
+  (r/atom (map
+           #(->>
+             (gen-rect white (+ 30 (* % 160)) 10 200 36)
+             (anim "etof" "1.2s" "infinite" {:delay (str (* 0.5 %) "s")})
+             (draw))
+           (range 10))))
 
 
 (def anim-hept1-white-dots
@@ -233,7 +233,7 @@
    (style {:transform-origin "center" :transform "scale(1.4)"})
    (anim "woosh-5" "4s" "infinite")
    (draw)
-   (atom)))
+   (r/atom)))
 
 (def anim-hept1-pink
   (->>
@@ -241,7 +241,7 @@
     (style {:mix-blend-mode "difference"})
     (anim "woosh-5" "4s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def anim-hept1-mint
   (->>
@@ -249,7 +249,7 @@
     (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
     (anim "woosh-6" "4s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def anim-hept2-white-dots
   (->>
@@ -257,7 +257,7 @@
     (style {:transform-origin "center" :transform "scale(1.4)"})
     (anim "woosh-7" "4s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def anim-hept2-mint
   (->>
@@ -265,7 +265,7 @@
     (style {:mix-blend-mode "difference"})
     (anim "woosh-8" "4s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def anim-hept2-pink
   (->>
@@ -273,7 +273,7 @@
     (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
     (anim "woosh-8" "4s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def bg
   (->>
@@ -281,7 +281,7 @@
    (style {:opacity 1 :transform-origin "center" :transform "scale(4)"})
    (anim "sc-rot" "3s" "infinite" {:timing "linear"})
    (draw)
-   (atom)))
+   (r/atom)))
 
 
 (def bb2
@@ -292,7 +292,7 @@
     (style {:mix-blend-mode "luminosity"})
     (anim "woosh" "4s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def bb4
   (->>
@@ -303,7 +303,7 @@
 
     (anim "woosh" "2s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 
 (def bb3
@@ -313,7 +313,7 @@
     (style {:mix-blend-mode "color-burn"})
     (anim "woosh-3" "3s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def bb6s
   (->>
@@ -322,7 +322,7 @@
     (style {:mix-blend-mode "color-burn"})
     (anim "woosh-3" "3s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def scale-me
   (->>
@@ -330,7 +330,7 @@
     (style {:transform "scale(50)"})
     (anim "scaley-huge" "5s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def new-scale
   (->>
@@ -338,7 +338,7 @@
    (style {:opacity 0.7})
    (style {:transform "translate(10vh, 60vh)"})
    (gen-group {:style {:animation "scaley 10s infinite"}})
-   (atom)))
+   (r/atom)))
 
 (def sc-circ
   (->>
@@ -348,7 +348,7 @@
               100)
     (anim "scaley" "5s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 (def mf
   (->>
@@ -370,7 +370,7 @@
     (style {:mix-blend-mode "overlay"})
     (draw)
     (when (nth-frame 2 frame))
-    (atom)))
+    (r/atom)))
 
 (def POLYGON
   (->>
@@ -378,7 +378,7 @@
     (style {:opacity 0.7})
     (anim "woosh" "10s" "infinite")
     (draw)
-    (atom)))
+    (r/atom)))
 
 
 ;; ------------------- DRAWING HELPERS ------------------------
@@ -411,7 +411,7 @@
                               "rotate(" (- 360 (rand-int 720)) "deg)")})
           (anim "fade-in-out" "10s" "infinite" {:delay (str (* 0.1 idx) "s")})
           (draw)
-          (atom)))
+          (r/atom)))
     (take 10 (repeatedly #(nth [mint navy navy mint] (rand-int 6))))))
 
 
@@ -431,7 +431,7 @@
                               :transform (str
                                           "rotate(" (rand-int 360) "deg)"
                                           "scale(60) translate(-20vh, -20vh)")}} %)))
-   (atom)))
+   (r/atom)))
 
 (defonce splash-yellow
   (scatter 20 (->>
@@ -474,37 +474,37 @@
 (def DEBUG false)
 
 (when-not DEBUG
-  (defonce collection (atom (list))))
+  (defonce collection (r/atom (list))))
 
 ;(reset! ran {})
 
 (def rr
-  (atom (->> (gen-grid 20
-                       30
-                       {:col 100 :row 150}
-                       (->> (gen-shape mint tri)))
-             ;(map #(style styles %))
-             ; map #(anim "rot" "10s" "infinite" %))
-             (map draw)
-             (map #(gen-group {:style {:transform-origin "center"
-                                       :transform "scale(2)"}} %))
-             (map #(gen-group {:mask (url "bitey")
-                               :style {:transform-origin "center"
-                                       :animation "rot 10s infinite"}} %)))))
+  (r/atom (->> (gen-grid 20
+                         30
+                         {:col 100 :row 150}
+                         (->> (gen-shape mint tri)))
+               ;(map #(style styles %))
+               ; map #(anim "rot" "10s" "infinite" %))
+               (map draw)
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :transform "scale(2)"}} %))
+               (map #(gen-group {:mask (url "bitey")
+                                 :style {:transform-origin "center"
+                                         :animation "rot 10s infinite"}} %)))))
 
 (def rr2
-  (atom (->> (gen-grid 20 30
-                       {:col 100 :row 150}
-                       (->> (gen-shape yellow tri)))
-             (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
-             (map #(anim "morph" "5s" "infinite" %))
-             (map draw)
-             (map #(gen-group {:style {:transform-origin "center"
-                                       :transform "scale(2)"}} %))
-             (map #(gen-group {:style {:transform-origin "center"
-                                       :transform "translate(-200px, -100px)"}} %))
-             (map #(gen-group {:style {:transform-origin "center"
-                                       :animation "rot 5s infinite"}})))))
+  (r/atom (->> (gen-grid 20 30
+                         {:col 100 :row 150}
+                         (->> (gen-shape yellow tri)))
+               (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
+               (map #(anim "morph" "5s" "infinite" %))
+               (map draw)
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :transform "scale(2)"}} %))
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :transform "translate(-200px, -100px)"}} %))
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :animation "rot 5s infinite"}})))))
 
 (defn freak-out-waves [s color]
   ;; left
@@ -628,11 +628,11 @@
 
 
 (when DEBUG
-  (defonce collection (atom (cx 1))))
+  (defonce collection (r/atom (cx 1))))
 
 ;; ----------- LOOP TIMERS ------------------------------
 
-(defonce frame (atom 0))
+(defonce frame (r/atom 0))
 
 (when-not DEBUG
   (defonce start-cx-timer
@@ -798,7 +798,7 @@
     @collection])
 
 
-(reagent/render-component [drawing]
-                          (js/document.getElementById "app-container"))
+(r/render-component [drawing]
+  (js/document.getElementById "app-container"))
 
 ;(hide-display)
