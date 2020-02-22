@@ -221,10 +221,10 @@
 (def drops
   (r/atom (map
            #(->>
-             (gen-rect white (+ 30 (* % 160)) 10 200 36)
+             (gen-rect gray (+ 30 (* % 160)) 5 200 36)
              (anim "etof" "1.2s" "infinite" {:delay (str (* 0.5 %) "s")})
              (draw))
-           (range 10))))
+           (range 20))))
 
 
 (def anim-hept1-white-dots
@@ -277,9 +277,9 @@
 
 (def bg
   (->>
-   (gen-circ (pattern (str "noise-" navy)) (* 0.5 @width) (* 0.5 @height) 1800)
+   (gen-circ (pattern (str "noise-" white)) (* 0.5 @width) (* 0.5 @height) 1800)
    (style {:opacity 1 :transform-origin "center" :transform "scale(4)"})
-   (anim "sc-rot" "3s" "infinite" {:timing "linear"})
+   (anim "sc-rot" "20s" "infinite" {:timing "linear"})
    (draw)
    (r/atom)))
 
@@ -583,18 +583,21 @@
 
 (defn sun-shape [color base-x base-y style cycle]
   (map (fn [[x y r]]
-         (->> (gen-circ color x y r)
-              (style style)
-              (draw)))
-       (take cycle [[base-x (- base-y 80) 18]
-                    [(+ base-x 50) (- base-y 50) 14]
-                    [(+ 80 base-x) base-y 18]
-                    [(+ base-x 50) (+ base-y 55) 14]
-                    [base-x (+ 80 base-y) 18]
-                    [(- base-x 55) (+ base-y 55) 14]
-                    [(- base-x 80) base-y 18]
-                    [(- base-x 55) (- base-y 50) 14]
-                    [base-x base-y 40]])))
+         (let [r (if (and (= 960 base-x) (= 200 base-y))
+                   (+ 4 r)
+                   (- r 3))]
+           (->> (gen-circ color x y r)
+                (style style)
+                (draw))))
+       [[base-x (- base-y 80) 18]
+        [(+ base-x 50) (- base-y 50) 14]
+        [(+ 80 base-x) base-y 18]
+        [(+ base-x 50) (+ base-y 55) 14]
+        [base-x (+ 80 base-y) 18]
+        [(- base-x 55) (+ base-y 55) 14]
+        [(- base-x 80) base-y 18]
+        [(- base-x 55) (- base-y 50) 14]
+        [base-x base-y 40]]))
 
 (def l1 (lerp))
 
@@ -612,61 +615,187 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
            ;(style {:opacity 0.9})
-           (draw))
+           (draw)))))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;; EARTH ;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;; EARTH ;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+      ;; TODOS
+      ;; top sun should be bigger and have an eye
+      ;; automate growing
+      ;; let size of circle grow and shrink
 
       ;;;;;;;;;;;;;;
       ;;; GROUND ;;;
       ;;;;;;;;;;;;;;
-      (->> (gen-circ (val-cyc frame (->> (vals blue-set-2)
-                                         (slow-val-cyc 140)))
-                     (* 0.5 @width)
-                     (* 1.4 @height)
-                     (+ 500 (* 10 (mod frame 140))))
-           (draw))
-    
-      (->> (gen-circ gray (* 0.5 @width) (* 1.4 @height) (-> s (* 60) (+ 600)))
-           (draw)) ;;;; 1.4 - 1.3 - 1.2 - 1.1
-
+      ;(->> (gen-circ (val-cyc frame (->> (vals blue-set-2)
+      ;                                   (slow-val-cyc 140)))
+      ;               (* 0.5 @width)
+      ;               (* 1.4 @height)
+      ;               (+ 500 (* 10 (mod frame 140))))
+      ;     (draw))
+      ;
+      ;(->> (gen-circ gray (* 0.5 @width) (* 1.4 @height) (-> s (* 60) (+ 600)))
+      ;     (draw)) ;;;; 1.4 - 1.3 - 1.2 - 1.1
+      ;
       ;;;;;;;;;;;;;;;;;;
       ;;; SUN-SHAPES ;;;
       ;;;;;;;;;;;;;;;;;;
-      (map (fn [[x y]]
-             (sun-shape gray x y {} (val-cyc frame (->> (range 1 10)
-                                                        (slow-val-cyc 140)))))
-           [[360 200] [660 300] [960 200] [1260 300] [1560 200]
-            [960 500] [460 500] [1460 500]
-            [700 700] [1200 700]]))))
+      ;(map (fn [[x y]]
+      ;       (sun-shape gray x y {} (val-cyc frame (->> (range 1 10)
+      ;                                                  (slow-val-cyc 140)))))
+      ;     [[360 200] [660 300] [960 200] [1260 300] [1560 200]
+      ;      [960 500] [460 500] [1460 500]
+      ;      [700 700] [1200 700]]))))
 
 
-      ;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;; WATER ;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;; WATER ;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;(moving-rects-vertical frame 2 8)
-      ;(moving-rects-horizontal frame 2 8))))
+      ;; TODOS
+      ;; bring in more fluid movements
+      ;; rotate drops
+      ;; too many straight lines -> more round things
+      ;; sine waves instead of horizontal waves
+      ;; something like raindrops
+      ;; some shape moving from outside of screen in sine waves to other side
+      ;; waves - ripple effect on the water
+
+      ;@drops
+      ;
+      ;(gen-bg-lines dark-green
+      ;              (mod frame 70)
+      ;              {:opacity (-> (mod frame 2) (/ 10) (+ 0.6))})
+      ;
+      ;(gen-cols brown-red (* 6 (mod frame 10)) 60 60)
+      ;
+      ;(->> (gen-grid 20 20
+      ;               {:col 100 :row 100}
+      ;               (gen-circ orange-red 30 30 (-> (* 10 s) (+ 6))))
+      ;     (map #(style {:opacity 0.7} %))
+      ;     (map draw)))))
+      ;
+      ;(moving-rects-vertical frame 2 10)
+      ;(moving-rects-horizontal frame 2 10))))
 
 
-      ;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;; FIRE ;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;; FIRE ;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+      ;; TODOS
+      ;; might keep some elements between phases
+      ;; first thing that gets in musically: congas
+      ;; things flashing: dots scattered randomly - blink - shrink - enlarge
+      ;; build up with kick - sync something - circle
+      ;; heptagon too predictable - more chaotic - animate at random positions)))
+
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;; MOVING HEPTAGONS ;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;@anim-hept1-mint
+      ;@anim-hept1-pink
+      ;@anim-hept1-white-dots
+      ;
+      ;@anim-hept2-pink
+      ;@anim-hept2-mint
+      ;@anim-hept2-white-dots
+      ;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;; OVERLAY RECTANGLES ;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;(->> (gen-rect mint 0 0 400 600)
+      ;     (style {:mix-blend-mode "difference"
+      ;             :opacity 0.6})
+      ;     (style {:transform (str "scale("
+      ;                             (val-cyc frame (concat (repeat 3 4)
+      ;                                                    (repeat 3 6)
+      ;                                                    (repeat 3 8)
+      ;                                                    (repeat 3 20)))
+      ;                             ")")})
+      ;     (draw)
+      ;     (when (nth-frame 1 frame)))
+      ;
+      ;(->> (gen-rect pink 0 0 400 600)
+      ;     (style {:mix-blend-mode "difference"
+      ;             :opacity 0.6})
+      ;     (style {:transform (str "scale("
+      ;                             (val-cyc frame (concat (repeat 3 20)
+      ;                                                    (repeat 3 8)
+      ;                                                    (repeat 3 6)
+      ;                                                    (repeat 3 4)))
+      ;                             ")")})
+      ;     (draw)
+      ;     (when (nth-frame 1 frame)))
+
+      ;;;;;;;;;;;;;;;
+      ;;;; SPLASH ;;;
+      ;;;;;;;;;;;;;;;
+      ;(when (and (nth-frame 4 frame)
+      ;           (nth-frame 3 frame)) @splash-yellow)
+      ;
+      ;(when (nth-frame 5 frame) @splash-gray)
+      ;
+      ;;;;;;;;;;;;;
+      ;;;; GRID ;;;
+      ;;;;;;;;;;;;;
+      ;(when (nth-frame 4 frame)
+      ;  (gen-line-grid pink 6 80 80
+      ;                 {:col 200 :row 200}))
+      ;
+      ;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;; FREAKOUT CIRCLE ;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;
+      ;(when (nth-frame 3 frame)
+      ;  (new-freakout @width @height 100 100 "testCirc2")))))
 
 
-      ;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;; AIR ;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;; AIR ;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+      ;; TODOS
+      ;; gradient seemless transitions
+      ;; maybe circles are moving too fast
+      ;; pick different colors
+      ;; fill the screen even more
+      ;
+      ;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;; OVERLAY RECTANGLES ;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;(moving-rects-horizontal frame 8 8)
+      ;(moving-rects-vertical frame 8 8)
+      ;
+      ;;;;;;;;;;;;;;;;;
+      ;;;; FREAKOUT ;;;
+      ;;;;;;;;;;;;;;;;;
+      ;(freak-out-waves s aquamarine)
+      ;(new-freakout @width
+      ;              @height
+      ;              3
+      ;              (->> (slow-val-cyc 2 [600 500 400 300 200 100 50 100 200 300 400 500])
+      ;                   (val-cyc frame))
+      ;              "testCirc2"))))
+      ;
 
-      ;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;; ETHER ;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;; ETHER ;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;)))
+
+      ;; TODOS
+      ;; no straight shapes
+      ;; like idea of rotation - make it infinite?
+      ;; spirals made of circles
+
+      ;@bg)))
+
 
 
 
