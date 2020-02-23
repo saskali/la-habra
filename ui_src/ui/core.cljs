@@ -478,21 +478,22 @@
 
 ;(reset! ran {})
 
-(def rr
+
+(def spinning-triangles-pink
   (r/atom (->> (gen-grid 20
                          30
                          {:col 100 :row 150}
-                         (->> (gen-shape mint tri)))
+                         (->> (gen-shape pink tri)))
                ;(map #(style styles %))
-               ; map #(anim "rot" "10s" "infinite" %))
+               ;(map #(anim "rot" "10s" "infinite" %))
                (map draw)
                (map #(gen-group {:style {:transform-origin "center"
-                                         :transform "scale(2)"}} %))
+                                         :transform "translate(-120px, -50px) scale(2)"}} %))
                (map #(gen-group {:mask (url "bitey")
                                  :style {:transform-origin "center"
-                                         :animation "rot 10s infinite"}} %)))))
+                                         :animation "smooth-rot 8s infinite linear"}} %)))))
 
-(def rr2
+(def spinning-triangles-pink2
   (r/atom (->> (gen-grid 20 30
                          {:col 100 :row 150}
                          (->> (gen-shape yellow tri)))
@@ -505,6 +506,17 @@
                                          :transform "translate(-200px, -100px)"}} %))
                (map #(gen-group {:style {:transform-origin "center"
                                          :animation "rot 5s infinite"}})))))
+
+(def spinning-triangles-mint
+  (r/atom (->> (gen-grid 30
+                         6
+                         {:col 60 :row 180}
+                         (->> (gen-shape mint tri)))
+               (map draw)
+               (map #(gen-group {:style {:mix-blend-mode "difference"
+                                         :transform-origin "center"
+                                         :transform "translate(-120px, 0) scale(2)"
+                                         :animation "smooth-rot 8s infinite linear"}} %)))))
 
 (defn freak-out-waves [s color]
   ;; left
@@ -695,6 +707,9 @@
       ;; things flashing: dots scattered randomly - blink - shrink - enlarge
       ;; build up with kick - sync something - circle
       ;; heptagon too predictable - more chaotic - animate at random positions)))
+      ;
+      @spinning-triangles-pink
+      @spinning-triangles-mint)))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;; MOVING HEPTAGONS ;;;;
