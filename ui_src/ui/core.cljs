@@ -9,7 +9,7 @@
                blue-set-2]]
             [ui.generators :refer
              [freak-out new-freakout scatter lerp
-              gen-circ gen-line gen-poly gen-rect gen-shape draw
+              gen-circ gen-line gen-poly gen-rect gen-shape gen-half-circ draw
               gen-group gen-offset-lines gen-bg-lines gen-mask
               gen-grid gen-line-grid gen-cols gen-rows]]
             [ui.filters :refer [turb noiz soft-noiz disappearing splotchy blur]]
@@ -581,11 +581,11 @@
          (draw)
          (when (nth-frame 1 frame)))))
 
-(defn sun-shape [color base-x base-y style cycle]
+(defn sun-shape [color base-x base-y style s cycle]
   (map (fn [[x y r]]
          (let [r (if (and (= 960 base-x) (= 200 base-y))
                    (+ 4 r)
-                   (- r 3))]
+                   (-> (* 6 s) (+ r) (- 3)))]
            (->> (gen-circ color x y r)
                 (style style)
                 (draw))))
@@ -615,7 +615,7 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
            ;(style {:opacity 0.9})
-           (draw)))))
+           (draw))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -625,34 +625,35 @@
       ;;;;;;;;;; EARTH ;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;; TODOS
-      ;; top sun should be bigger and have an eye
-      ;; automate growing
-      ;; let size of circle grow and shrink
-
       ;;;;;;;;;;;;;;
       ;;; GROUND ;;;
       ;;;;;;;;;;;;;;
-      ;(->> (gen-circ (val-cyc frame (->> (vals blue-set-2)
-      ;                                   (slow-val-cyc 140)))
-      ;               (* 0.5 @width)
-      ;               (* 1.4 @height)
-      ;               (+ 500 (* 10 (mod frame 140))))
-      ;     (draw))
-      ;
-      ;(->> (gen-circ gray (* 0.5 @width) (* 1.4 @height) (-> s (* 60) (+ 600)))
-      ;     (draw)) ;;;; 1.4 - 1.3 - 1.2 - 1.1
-      ;
-      ;;;;;;;;;;;;;;;;;;
-      ;;; SUN-SHAPES ;;;
-      ;;;;;;;;;;;;;;;;;;
-      ;(map (fn [[x y]]
-      ;       (sun-shape gray x y {} (val-cyc frame (->> (range 1 10)
-      ;                                                  (slow-val-cyc 140)))))
-      ;     [[360 200] [660 300] [960 200] [1260 300] [1560 200]
-      ;      [960 500] [460 500] [1460 500]
-      ;      [700 700] [1200 700]]))))
+      (->> (gen-circ (val-cyc frame (->> (vals blue-set-2)
+                                         (slow-val-cyc 140)))
+                     (* 0.5 @width)
+                     (* 1.4 @height)
+                     (+ 500 (* 10 (mod frame 140))))
+           (draw))
 
+      (->> (gen-circ gray
+                     (* 0.5 @width)
+                     (* 1.4 @height)
+                     (+ (* s 30)
+                        (->> (slow-val-cyc 8 [500 550 600 650 700])
+                             (val-cyc frame))))
+           (draw))
+
+      ;;;;;;;;;;;;;;;;;
+      ;; SUN-SHAPES ;;;
+      ;;;;;;;;;;;;;;;;;
+      (map (fn [[x y]]
+             (sun-shape gray x y {} s (val-cyc frame (->> (range 1 10) (slow-val-cyc 140)))))
+           [[360 200] [660 300] [960 200] [1260 300] [1560 200]
+            [960 500] [460 500] [1460 500]
+            [700 700] [1200 700]])
+
+      (->> (gen-half-circ white 916 200)
+           (draw)))))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; WATER ;;;;;;;;;;
@@ -695,6 +696,9 @@
       ;; things flashing: dots scattered randomly - blink - shrink - enlarge
       ;; build up with kick - sync something - circle
       ;; heptagon too predictable - more chaotic - animate at random positions)))
+      ;
+      ;@spinning-triangles-pink
+      ;@spinning-triangles-mint)))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;; MOVING HEPTAGONS ;;;;

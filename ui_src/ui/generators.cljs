@@ -63,6 +63,14 @@
    :style {:fill fill-string
            :transform-origin "center"}})
 
+(defn gen-half-circ
+  [fill-string x y]
+  (gen-shape fill-string (str "M"
+                              x
+                              ","
+                              y
+                              " a1,1 0 0,0 88,0")))
+
 
 ;; -------------------------- DRAW ----------------------------
 
