@@ -813,7 +813,7 @@
 (when-not DEBUG
   (defonce start-cx-timer
     (js/setInterval
-      #(reset! collection (cx @frame)) 37.5))
+      #(reset! collection (cx @frame)) 66.6))
 
   ;(defonce start-cx-timer-2
   ;  (js/setInterval
@@ -821,7 +821,7 @@
 
   (defonce start-frame-timer
     (js/setInterval
-      #(swap! frame inc) 375)))
+      #(swap! frame inc) 666)))
 
 
 ;; ----------- DEFS AND DRAW ------------------------------
