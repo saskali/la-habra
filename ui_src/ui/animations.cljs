@@ -77,6 +77,27 @@
 
 ;; -------------------- SOME BASE KEYFRAMES ---------------------------
 
+(defn back-and-forth!
+  [name start-str finish-str]
+  (make-frames! name [0 50 100]
+                (make-body "transform" [(str start-str)
+                                        (str finish-str)
+                                        (str start-str)])))
+
+(defn a-to-b!
+  [name att start-str finish-str]
+  (make-frames! name [0 100]
+                (make-body att [(str start-str)
+                                (str finish-str)])))
+
+(defn fade-start!
+  [name op-end]
+  (make-frames! name [0 99 100]
+                (make-body "fill-opacity" [(str 0)
+                                           (str 0)
+                                           (str op-end)])))
+
+
 (make-frames!
   "fade-in-out"
   [0 4 8 50 54 94]
@@ -117,6 +138,123 @@
   "rev"
   [0 100]
   (make-body "transform" ["rotate(0deg)" "rotate(-360deg)"]))
+
+(fade-start! "fi" 1)
+
+(make-frames!
+  "etof"
+  [0 100]
+  (make-body "transform" ["translateY(10px)" "translateY(1000px)"]))
+
+(back-and-forth! "scaley" "scale(1)" "scale(15)")
+(back-and-forth! "scaley-huge" "scale(20)" "scale(50)")
+
+(a-to-b! "new-fi" "fill-opacity" "0" ".5")
+
+(a-to-b! "sc-rot"
+         "transform"
+         "scale(4) rotate(0deg)"
+         "scale(30) rotate(-80deg)")
+
+(a-to-b! "grow2to3"
+         "transform"
+         "rotate(280deg) scale(1)"
+         "rotate(280deg) scale(1.2)")
+
+(make-frames!
+  "woosh"
+  [10, 35, 55, 85, 92]
+  (make-body "transform" ["translate(80vw, 50vh) rotate(2deg) scale(1.2)"
+                          "translate(60vw, 60vh) rotate(-200deg) scale(2.4)"
+                          "translate(40vw, 40vh) rotate(120deg) scale(4.4)"
+                          "translate(20vw, 30vh) rotate(-1000deg) scale(3.2)"
+                          "translate(60vw, 80vh) rotate(300deg) scale(6.2)"]))
+
+(make-frames!
+  "woosh-2"
+  [10, 35, 55, 85, 92]
+  (make-body "transform" ["translate(80vw, 50vh) rotate(2deg) scale(11.2)"
+                          "translate(60vw, 60vh) rotate(-200deg) scale(12.4)"
+                          "translate(40vw, 40vh) rotate(120deg) scale(13.4)"
+                          "translate(20vw, 30vh) rotate(-210deg) scale(12.2)"
+                          "translate(60vw, 80vh) rotate(400deg) scale(6.2)"]))
+
+(make-frames!
+  "woosh-3"
+  [10, 55, 85, 92]
+  (make-body "transform" ["translate(80vw, 10vh) rotate(2deg) scale(2.2)"
+                          "translate(40vw, 40vh) rotate(120deg) scale(8.4)"
+                          "translate(50vw, 30vh) rotate(0deg) scale(12.2)"
+                          "translate(60vw, 80vh) rotate(400deg) scale(4.2)"]))
+(make-frames!
+  "woosh-4"
+  [10, 35, 55, 85, 92]
+  (make-body "transform" ["translate(80vw, 10vh) rotate(2deg) scale(2.2)"
+                          "translate(40vw, 40vh) rotate(220deg) scale(10.4)"
+                          "translate(50vw, 30vh) rotate(0deg) scale(4.2)"
+                          "translate(50vw, 30vh) rotate(-300deg) scale(2.2)"
+                          "translate(60vw, 80vh) rotate(400deg) scale(1.2)"]))
+
+(make-frames!
+  "woosh-5"
+  [20, 40, 60, 80, 100]
+  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(1.2)"
+                          "translate(45vw, 45vh) rotate(-200deg) scale(1.8)"
+                          "translate(80vw, 80vh) rotate(0deg) scale(4.2)"
+                          "translate(60vw, 20vh) rotate(-300deg) scale(2.4)"
+                          "translate(20vw, 40vh) rotate(0deg) scale(1.8)"]))
+
+(make-frames!
+  "woosh-6"
+  [20, 40, 60, 80, 100]
+  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(0.6)"
+                          "translate(45vw, 45vh) rotate(-200deg) scale(2.2)"
+                          "translate(80vw, 80vh) rotate(0deg) scale(3.8)"
+                          "translate(60vw, 20vh) rotate(-300deg) scale(3.2)"
+                          "translate(20vw, 40vh) rotate(0deg) scale(2.2)"]))
+
+(make-frames!
+  "woosh-7"
+  [20, 40, 60, 80, 100]
+  (make-body "transform" ["translate(20vw, 80vh) rotate(20deg) scale(0.4)"
+                          "translate(55vw, 60vh) rotate(-200deg) scale(1.6)"
+                          "translate(70vw, 70vh) rotate(0deg) scale(4.2)"
+                          "translate(80vw, 45vh) rotate(-300deg) scale(2.2)"
+                          "translate(10vw, 50vh) rotate(0deg) scale(2.2)"]))
+
+(make-frames!
+  "woosh-8"
+  [20, 40, 60, 80, 100]
+  (make-body "transform" ["translate(20vw, 80vh) rotate(2deg) scale(0.8)"
+                          "translate(55vw, 60vh) rotate(-200deg) scale(2)"
+                          "translate(70vw, 70vh) rotate(0deg) scale(4.4)"
+                          "translate(80vw, 45vh) rotate(-300deg) scale(2.2)"
+                          "translate(10vw, 50vh) rotate(0deg) scale(2.2)"]))
+
+
+(make-frames!
+  "loopy-left"
+  [10, 35, 55, 85, 92]
+  (make-body "transform" ["translate(90vw, 10vh) rotate(2deg) scale(2.2)"
+                          "translate(80vw, 30vh) rotate(220deg) scale(6.4)"
+                          "translate(60vw, 40vh) rotate(0deg) scale(4.2)"
+                          "translate(30vw, 80vh) rotate(-300deg) scale(2.2)"
+                          "translate(10vw, 90vh) rotate(400deg) scale(3.2)"]))
+
+(make-frames!
+  "loopy-right"
+  [10, 35, 55, 85, 92]
+  (make-body "transform" ["translate(10vw, 10vh) rotate(2deg) scale(2.2)"
+                          "translate(30vw, 80vh) rotate(220deg) scale(6.4)"
+                          "translate(60vw, 40vh) rotate(0deg) scale(4.2)"
+                          "translate(80vw, 30vh) rotate(-300deg) scale(2.2)"
+                          "translate(90vw, 90vh) rotate(400deg) scale(3.2)"]))
+
+(make-frames!
+  "dashy"
+  [100]
+  (make-body "stroke-dashoffset" [0]))
+
 
 ;; ------------------- BLINKING ---------------------------
 

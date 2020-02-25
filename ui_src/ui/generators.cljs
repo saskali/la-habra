@@ -71,6 +71,18 @@
                               y
                               " a1,1 0 0,0 88,0")))
 
+(def fib-seq
+  ((fn fib [a b]
+     (lazy-seq (cons a (fib b (+ a b)))))
+   0 1))
+
+(defn get-scaling-factors [speed partitions]
+  (->> fib-seq
+       (drop 3)
+       (take partitions)
+       (map #(repeat speed %))
+       (apply concat)))
+
 
 ;; -------------------------- DRAW ----------------------------
 
@@ -235,6 +247,20 @@
               :transform (str "scale("
                               sc
                               ")")}]))))
+
+(defn freak-out-waves [s color]
+  ;; left
+  (freak-out (/ @width s) @height 5 500 color {:opacity 0.5})
+
+  ;; top
+  (freak-out @width (/ @height s) 5 500 color {:opacity 0.5})
+
+  ;; right
+  (freak-out (- @width (/ @width s)) @width 0 @height 1 5 500 color {:opacity 0.5})
+
+  ;; bottom
+  (freak-out 0 @width (- @height (/ @height s)) @height 1 5 500 color {:opacity 0.5}))
+
 (defn gen-mask
  [id insides]
  [:mask {:id id :key (random-uuid)} insides])
