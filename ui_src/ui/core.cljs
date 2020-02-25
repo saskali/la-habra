@@ -80,6 +80,18 @@
   (make-body "fill" [pink pink yellow midnight midnight]))
 
 (make-frames!
+  "colorcolor"
+  [10, 35, 55, 85, 92]
+  (make-body "fill" (mapv #(pattern (str "noise-" %))
+                          [mint mint mint orange orange])))
+
+(make-frames!
+  "colorcolorcolor"
+  [10, 35, 55, 85, 92]
+  (make-body "fill" (mapv #(pattern (str "noise-" %))
+                          [navy mint orange pink gray])))
+
+(make-frames!
   "morph"
   [0 15 30 45 60 75 100]
   (make-body "d" [(str "path('"tri"')")
@@ -563,7 +575,7 @@
       ;;;; FREAKOUT CIRCLE ;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;
       ;(when (nth-frame 3 frame)
-      ;  (new-freakout @width @height 100 100 "testCirc2")))))
+      ;  (new-freakout @width @height 2 50 "testCirc3")))))
 
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -759,7 +771,7 @@
                :fill (pattern (str "noise-" mint))}]
      [:circle {:id "testCirc3"
                :cx 0 :cy 0 :r 100
-               :style {:animation "colorcolorcolor 100s infinite"
+               :style {:animation "colorcolorcolor 10s infinite"
                        :fill (pattern (str "noise-" yellow))}}]
 
      (map identity gradients)
