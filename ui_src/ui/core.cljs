@@ -131,7 +131,7 @@
 
 (def hept1-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
-       (style {:transform-origin "center" :transform "scale(1.4)"})
+       (style {:transform-origin "center" :transform "scale(1.6)"})
        (anim "woosh-5" "4s" "infinite")
        (draw)
        (r/atom)))
@@ -145,65 +145,94 @@
 
 (def hept1-mint-anim
   (->> (gen-shape mint hept)
-       (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
+       (style {:mix-blend-mode "difference"
+               :transform-origin "center"
+               :transform "scale(1.8)"})
        (anim "woosh-6" "4s" "infinite")
        (draw)
        (r/atom)))
 
-(def anim-hept2-white-dots
+(def hept2-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
        (style {:transform-origin "center" :transform "scale(1.4)"})
        (anim "woosh-7" "4s" "infinite")
        (draw)
        (r/atom)))
 
-(def anim-hept2-mint
+(def hept2-mint-anim
   (->> (gen-shape mint hept)
        (style {:mix-blend-mode "difference"})
        (anim "woosh-8" "4s" "infinite")
        (draw)
        (r/atom)))
 
-(def anim-hept2-pink
+(def hept2-pink-anim
   (->> (gen-shape (pattern pink) hept)
-       (style {:mix-blend-mode "difference" :transform-origin "center" :transform "scale(1.8)"})
+       (style {:mix-blend-mode "difference"
+               :transform-origin "center"
+               :transform "scale(1.8)"})
        (anim "woosh-8" "4s" "infinite")
        (draw)
        (r/atom)))
 
-(def bg
-  (->> (gen-circ (pattern (str "noise-" white)) (* 0.5 @width) (* 0.5 @height) 1800)
-       (style {:opacity 1 :transform-origin "center" :transform "scale(4)"})
+(def hept3-orange-anim
+  (->> (gen-shape orange hept)
+       (style {:transform "translate(30vw, 44vh) scale(2.4)"})
+       (style {:mix-blend-mode "color-burn"})
+       (anim "woosh-3" "3s" "infinite")
+       (draw)
+       (r/atom)))
+
+(def noise-circ-anim ;; use with orange background
+  (->> (gen-circ (pattern (str "noise-" white))
+                 (* 0.5 @width)
+                 (* 0.5 @height)
+                 100)
+       (style {:mix-blend-mode "color-dodge"
+               :opacity 0.4
+               :transform-origin "center"
+               :transform "scale(4)"})
        (anim "sc-rot" "20s" "infinite" {:timing "linear"})
        (draw)
        (r/atom)))
 
-(def bb
-  (->> (gen-grid 40 28
-                 {:col 40 :row 40}
+(def oct-grid-anim
+  (->> (gen-grid 86 42
+                 {:col 20 :row 20}
                  (gen-shape mint oct))
        (map #(style {:mix-blend-mode "difference"}  %))
-       (map #(anim "supercolor" (str (rand-int 100) "s") "infinite" %))
+       (map #(anim "supercolor" (str (rand-int 50) "s") "infinite" %))
        (map draw)
        (map #(gen-group {:style {:transform-origin "center"
                                  :transform (str "rotate(" (rand-int 360) "deg)"
                                                  "scale(60) translate(-20vh, -20vh)")}} %))
        (r/atom)))
 
-(def bb2
+(def shimmer-anim
+  (->> (gen-grid 86 42
+                 {:col 20 :row 20}
+                 (gen-shape mint oct))
+       (map #(style {:mix-blend-mode "difference"}  %))
+       (map #(anim "supercolor" (str (rand-int 50) "s") "infinite" %))
+       (map draw)
+       (r/atom)))
+
+(def pixie-dust-anim
+  (->> (gen-grid 86 42
+                 {:col 20 :row 20}
+                 (gen-shape mint oct))
+       (map #(style {:mix-blend-mode "difference"
+                     :opacity 0.1}  %))
+       (map #(anim "supercolor" (str (rand-int 50) "s") "infinite" %))
+       (map draw)
+       (r/atom)))
+
+(def shape-shift-anim
   (->> (gen-shape mint oct)
        (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"})
        ;(style {:mix-blend-mode "luminosity" :filter (url (:id noiz))} )
        (style {:mix-blend-mode "luminosity"})
        (anim "morph" "8s" "infinite")
-       (draw)
-       (r/atom)))
-
-(def bb3
-  (->> (gen-shape orange hept)
-       (style {:transform "translate(30vw, 44vh) scale(2.4)"})
-       (style {:mix-blend-mode "color-burn"})
-       (anim "woosh-3" "3s" "infinite")
        (draw)
        (r/atom)))
 
@@ -431,7 +460,7 @@
 
 (defn cx [frame]
   (let
-    [colors (slow-val-cyc 12 [midnight]);; orange pink yellow
+    [colors (slow-val-cyc 12 [orange]);; orange pink yellow
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
      s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
 
@@ -442,7 +471,7 @@
       (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
            ;(style {:opacity 0.9})
            (draw))
-      @bb5)))
+
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -467,7 +496,7 @@
       ;               (+ (* s 30)
       ;                  (->> (slow-val-cyc 8 [500 550 600 650 700])
       ;                       (val-cyc frame))))
-      ;     (draw))
+      ;     (draw)))))
       ;
       ;;;;;;;;;;;;;;;;;;
       ;;; SUN-SHAPES ;;;
@@ -494,7 +523,8 @@
       ;; some shape moving from outside of screen in sine waves to other side
       ;; waves - ripple effect on the water
 
-      ;@drops
+      ;@bb5
+      ;@drops2
       ;
       ;(gen-bg-lines dark-green
       ;              (mod frame 70)
@@ -515,7 +545,7 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; FIRE ;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+      ;@oct-grid-anim)))
       ;; TODOS
       ;; might keep some elements between phases
       ;; first thing that gets in musically: congas
@@ -524,7 +554,15 @@
       ;; heptagon too predictable - more chaotic - animate at random positions)))
       ;
       ;@spinning-triangles-pink
-      ;@spinning-triangles-mint)))
+      ;@spinning-triangles-mint
+      ;
+      ;@hept1-white-dots-anim
+      ;@hept1-pink-anim
+
+      ;@shimmer-anim)))
+
+      ;@bg
+      ;@bb)))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;; MOVING HEPTAGONS ;;;;
@@ -624,7 +662,7 @@
       ;; like idea of rotation - make it infinite?
       ;; spirals made of circles
 
-      ;@bg)))
+      @pixie-dust-anim)))
 
       ;@splash-g
       ;@splash-y
