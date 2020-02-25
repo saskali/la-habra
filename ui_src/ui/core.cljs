@@ -90,6 +90,14 @@
                   (str "path('"oct"')")
                   (str "path('"tri"')")]))
 
+(make-frames!
+  "morph2"
+  [0 33 66 100]
+  (make-body "d" [(str "path('"tri"')")
+                  (str "path('"pent"')")
+                  (str "path('"hept"')")
+                  (str "path('"tri"')")]))
+
 
 ;; --------------- ATOMS STORAGE --------------------
 
@@ -185,6 +193,14 @@
        ;(style {:mix-blend-mode "color-dodge" :filter (url (:id noiz))} )
        (style {:mix-blend-mode "color-dodge"})
        (anim "woosh" "2s" "infinite")
+       (draw)
+       (r/atom)))
+
+(def bb5
+  (->> (gen-shape mint oct)
+       (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"
+               :animation "morph2 3s infinite, fade-in-out 2s infinite, woosh-3 8s infinite"
+               :mix-blend-mode "luminosity"})
        (draw)
        (r/atom)))
 
@@ -406,7 +422,7 @@
       (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
            ;(style {:opacity 0.9})
            (draw))
-      @bb2)))
+      @bb5)))
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

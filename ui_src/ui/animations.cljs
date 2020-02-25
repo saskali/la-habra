@@ -100,6 +100,11 @@
 
 (make-frames!
   "fade-in-out"
+  [0 10 20 30 40 50 60 70 80 90 100]
+  (make-body "fill-opacity" [1 0.8 0.6 0.4 0.2 0 0.2 0.4 0.6 0.8 1]))
+
+(make-frames!
+  "fade-in-out-irregular"
   [0 4 8 50 54 94]
   (make-body "fill-opacity" [1 0.7 0.5 0.2 0 1]))
 
