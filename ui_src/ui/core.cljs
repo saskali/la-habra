@@ -40,7 +40,7 @@
 
 ;; ------------------------ SETTINGS  ---------------------
 
-(hide-display) ;; hides heads up display for performance
+;(hide-display) ;; hides heads up display for performance
 
 (def width (r/atom 1920)) ;;(atom (.-innerWidth js/window)))
 (def height (r/atom 1080)) ;;(atom (.-innerHeight js/window)))
@@ -112,6 +112,12 @@
 
 
 ;; --------------- ATOMS STORAGE --------------------
+
+(def seed
+  (->> (gen-circ gray (quot @width 2) 10 30)
+       (anim "etof" "80s" 1)
+       (draw)
+       (r/atom)))
 
 (def drops
   (-> (fn [delay]
@@ -225,13 +231,16 @@
                      :opacity 0.1}  %))
        (map #(anim "supercolor" (str (rand-int 50) "s") "infinite" %))
        (map draw)
+       (map #(gen-group {:style {:transform-origin "center"
+                                 :transform (str "rotate(" (rand-int 360) "deg)"
+                                                 "scale(1.2) translate(-20vh, -20vh)")}} %))
        (r/atom)))
 
 (def shape-shift-anim
   (->> (gen-shape mint oct)
        (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"})
-       ;(style {:mix-blend-mode "luminosity" :filter (url (:id noiz))} )
-       (style {:mix-blend-mode "luminosity"})
+       (style {:mix-blend-mode "difference" :filter (url (:id noiz))})
+       ;(style {:mix-blend-mode "difference"})
        (anim "morph" "8s" "infinite")
        (draw)
        (r/atom)))
@@ -342,6 +351,45 @@
        (map #(gen-group {:style {:transform-origin "center"
                                  :animation "rot 5s infinite"}}))
        (r/atom)))
+
+(def spinning-triangles-pink
+  (r/atom (->> (gen-grid 20
+                         30
+                         {:col 100 :row 150}
+                         (->> (gen-shape pink tri)))
+               ;(map #(style styles %))
+               ;(map #(anim "rot" "10s" "infinite" %))
+               (map draw)
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :transform "translate(-120px, -50px) scale(2)"}} %))
+               (map #(gen-group {:mask (url "bitey")
+                                 :style {:transform-origin "center"
+                                         :animation "smooth-rot 8s infinite linear"}} %)))))
+
+(def spinning-triangles-pink2
+  (r/atom (->> (gen-grid 20 30
+                         {:col 100 :row 150}
+                         (->> (gen-shape yellow tri)))
+               (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
+               (map #(anim "morph" "5s" "infinite" %))
+               (map draw)
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :transform "scale(2)"}} %))
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :transform "translate(-200px, -100px)"}} %))
+               (map #(gen-group {:style {:transform-origin "center"
+                                         :animation "rot 5s infinite"}})))))
+
+(def spinning-triangles-mint
+  (r/atom (->> (gen-grid 30
+                         6
+                         {:col 60 :row 180}
+                         (->> (gen-shape mint tri)))
+               (map draw)
+               (map #(gen-group {:style {:mix-blend-mode "difference"
+                                         :transform-origin "center"
+                                         :transform "translate(-120px, 0) scale(2)"
+                                         :animation "smooth-rot 8s infinite linear"}} %)))))
 
 ;;;;;;;;;;;;;;
 ;; SPLASHES ;;
@@ -480,6 +528,8 @@
       ;;;;;;;;;; EARTH ;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+      ;@seed
+
       ;;;;;;;;;;;;;;
       ;;; GROUND ;;;
       ;;;;;;;;;;;;;;
@@ -487,27 +537,28 @@
       ;                                   (slow-val-cyc 140)))
       ;               (* 0.5 @width)
       ;               (* 1.4 @height)
-      ;               (+ 500 (* 10 (mod frame 140))))
+      ;               (+ 500 (* 200 (mod frame 8))))
       ;     (draw))
-      ;
       ;(->> (gen-circ gray
       ;               (* 0.5 @width)
       ;               (* 1.4 @height)
       ;               (+ (* s 30)
-      ;                  (->> (slow-val-cyc 8 [500 550 600 650 700])
+      ;                  (->> (slow-val-cyc 8 [550 600 650 700]);; [700 700 550 700]
       ;                       (val-cyc frame))))
-      ;     (draw)))))
-      ;
+      ;     (draw))
+           ;(when (or (nth-frame 8 frame)
+           ;          (nth-frame 9 frame)))))))
+
       ;;;;;;;;;;;;;;;;;;
       ;;; SUN-SHAPES ;;;
       ;;;;;;;;;;;;;;;;;;
       ;(map (fn [[x y]]
-      ;       (sun-shape gray x y {} s (val-cyc frame (->> (range 1 10) (slow-val-cyc 140)))))
+      ;       (sun-shape midnight x y {} s (val-cyc frame (->> (range 1 10) (slow-val-cyc 8)))))
       ;     [[360 200] [660 300] [960 200] [1260 300] [1560 200]
       ;      [960 500] [460 500] [1460 500]
       ;      [700 700] [1200 700]])
       ;
-      ;(->> (gen-half-circ white 916 200)
+      ;(->> (gen-half-circ midnight 916 200)
       ;     (draw)))))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -523,8 +574,11 @@
       ;; some shape moving from outside of screen in sine waves to other side
       ;; waves - ripple effect on the water
 
+      ;; (style {:filter (url (:id turb))}
+      ;(gen-grid)
       ;@bb5
       ;@drops2
+      ;@noise-circ-anim
       ;
       ;(gen-bg-lines dark-green
       ;              (mod frame 70)
@@ -537,7 +591,7 @@
       ;               (gen-circ orange-red 30 30 (-> (* 10 s) (+ 6))))
       ;     (map #(style {:opacity 0.7} %))
       ;     (map draw)))))
-      ;
+
       ;(gen-moving-rects-vt frame 2 10)
       ;(gen-moving-rects-hz frame 2 10))))
 
@@ -553,12 +607,11 @@
       ;; build up with kick - sync something - circle
       ;; heptagon too predictable - more chaotic - animate at random positions)))
       ;
-      ;@spinning-triangles-pink
-      ;@spinning-triangles-mint
+      @spinning-triangles-pink
+      @spinning-triangles-mint
       ;
-      ;@hept1-white-dots-anim
-      ;@hept1-pink-anim
-
+      @hept1-white-dots-anim
+      @hept1-pink-anim)))
       ;@shimmer-anim)))
 
       ;@bg
@@ -662,8 +715,9 @@
       ;; like idea of rotation - make it infinite?
       ;; spirals made of circles
 
-      @pixie-dust-anim)))
-
+      ;(style {:filter (url (:id disappearing))}
+      ;@pixie-dust-anim)))
+      ;@shape-shift-anim)))
       ;@splash-g
       ;@splash-y
       ;@splash-yl
@@ -696,9 +750,17 @@
 ;; ----------- DEFS AND DRAW ------------------------------
 
 (def gradients
-  [[:linearGradient {:key (random-uuid) :id "grad"}
-    [:stop {:offset "0" :stop-color "white" :stop-opacity "0"}]
-    [:stop {:offset "1" :stop-color "white" :stop-opacity "1"}]]])
+  [[:linearGradient {:key (random-uuid) :id "grad1"}
+    [:stop {:offset "0" :stop-color "yellow" :stop-opacity "0.8"}]
+    [:stop {:offset "1" :stop-color "green" :stop-opacity "0.8"}]]
+
+   [:radialGradient {:key (random-uuid) :id "grad2" :cx 0.15 :cy 0.15 :r 1}
+    [:stop {:offset "0" :stop-color "purple" :stop-opacity "0.8"}]
+    [:stop {:offset "1" :stop-color "silver" :stop-opacity "0.8"}]]
+
+   [:radialGradient {:key (random-uuid) :id "grad3" :cx 0.5 :cy 0.5 :r 0.6 :fx 0.75 :fy 0.75}
+    [:stop {:offset "0" :stop-color "purple" :stop-opacity "0.8"}]
+    [:stop {:offset "1" :stop-color "silver" :stop-opacity "0.8"}]]])
 
 (def mask-list
   [["poly-mask" [:path {:d b2
