@@ -134,6 +134,16 @@
   (make-body "transform" ["rotate(0deg)" "rotate(360deg)"]))
 
 (make-frames!
+  "smooth-rot"
+  [0 25 50 75 100]
+  (make-body "transform"
+             ["rotate(0deg)"
+              "rotate(90deg)"
+              "rotate(180deg)"
+              "rotate(270deg)"
+              "rotate(360deg)"]))
+
+(make-frames!
   "cent-rot"
   [0 100]
   (make-body "transform" ["translate(300px, 300px) scale(6.2) rotate(0deg)"
