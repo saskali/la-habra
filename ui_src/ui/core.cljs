@@ -121,6 +121,14 @@
       (map (range 20))
       (r/atom)))
 
+(def drops2
+  (-> (fn [delay]
+        (->> (gen-circ gray (+ 30 (* delay 160)) 5 10)
+             (anim "etof2" "1.2s" "infinite" {:delay (str (* 0.25 delay) "s")})
+             (draw)))
+      (map (range 10))
+      (r/atom)))
+
 (def hept1-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
        (style {:transform-origin "center" :transform "scale(1.4)"})

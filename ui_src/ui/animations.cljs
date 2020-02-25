@@ -151,6 +151,14 @@
   [0 100]
   (make-body "transform" ["translateY(10px)" "translateY(1000px)"]))
 
+(make-frames!
+  "etof2"
+  [0 50 70 100]
+  (make-body "transform" ["translateY(20px)"
+                          "translateY(300px)"
+                          "translateY(600px)"
+                          "translateY(1000px)"]))
+
 (back-and-forth! "scaley" "scale(1)" "scale(15)")
 (back-and-forth! "scaley-huge" "scale(20)" "scale(50)")
 
