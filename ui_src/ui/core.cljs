@@ -105,10 +105,10 @@
 (make-frames!
   "morph2"
   [0 33 66 100]
-  (make-body "d" [(str "path('"tri"')")
-                  (str "path('"pent"')")
+  (make-body "d" [(str "path('"pent"')")
                   (str "path('"hept"')")
-                  (str "path('"tri"')")]))
+                  (str "path('"oct"')")
+                  (str "path('"pent"')")]))
 
 
 ;; --------------- ATOMS STORAGE --------------------
@@ -203,7 +203,7 @@
        (r/atom)))
 
 (def oct-grid-anim
-  (->> (gen-grid 86 42
+  (->> (gen-grid 4 4
                  {:col 20 :row 20}
                  (gen-shape mint oct))
        (map #(style {:mix-blend-mode "difference"}  %))
@@ -225,7 +225,7 @@
 
 (def pixie-dust-anim
   (->> (gen-grid 86 42
-                 {:col 20 :row 20}
+                 {:col 40 :row 40}
                  (gen-shape mint oct))
        (map #(style {:mix-blend-mode "difference"
                      :opacity 0.1}  %))
@@ -257,7 +257,7 @@
 (def bb5
   (->> (gen-shape mint oct)
        (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"
-               :animation "morph2 3s infinite, fade-in-out 2s infinite, woosh-3 8s infinite"
+               :animation "morph2 6s infinite, fade-in-out 6s infinite, woosh-3 8s infinite"
                :mix-blend-mode "luminosity"})
        (draw)
        (r/atom)))
@@ -508,7 +508,7 @@
 
 (defn cx [frame]
   (let
-    [colors (slow-val-cyc 12 [orange]);; orange pink yellow
+    [colors (slow-val-cyc 12 [midnight]);; orange pink yellow
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
      s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
 
@@ -518,7 +518,7 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
            ;(style {:opacity 0.9})
-           (draw))
+           (draw)))))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -527,6 +527,18 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; EARTH ;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+      ;; transition from seed to larger circle
+      ;; earth is about stability -> no blinking
+      ;; everything shall be smooth as baby butt
+      ;; try 8, 16, 32 for growing circle
+      ;; ball movement smooth
+      ;; set colors
+      ;; missing sense for resolution
+      ;; there doesn't seem to be a climax
+      ;; keep big background ball up
+      ;; make small structures collapse in themselves and slowly disappear
+      ;; collapse big ball on the bottom
 
       ;@seed
 
@@ -573,12 +585,19 @@
       ;; something like raindrops
       ;; some shape moving from outside of screen in sine waves to other side
       ;; waves - ripple effect on the water
+      ;; drops are good
+      ;; more random drops
+      ;; grid of dots feels out of place -> too predictable -> maybe random -> colors of the balls are orange
+      ;; blur noise circ anim -> go forwards and backwards for continuity
+      ;; bb5 is too predictable kind of repeatedly too sharp -> random movement
+
+
 
       ;; (style {:filter (url (:id turb))}
       ;(gen-grid)
-      ;@bb5
+      ;@bb5)))
       ;@drops2
-      ;@noise-circ-anim
+      ;@noise-circ-anim)))
       ;
       ;(gen-bg-lines dark-green
       ;              (mod frame 70)
@@ -599,29 +618,32 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; FIRE ;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;@oct-grid-anim)))
+      ;@oct-grid-anim
       ;; TODOS
       ;; might keep some elements between phases
       ;; first thing that gets in musically: congas
       ;; things flashing: dots scattered randomly - blink - shrink - enlarge
       ;; build up with kick - sync something - circle
       ;; heptagon too predictable - more chaotic - animate at random positions)))
+      ;; transition to fire
+      ;; like explosion of colors -> more red though
+      ;; shape that moves too predictable -> get in old hept merging thing
       ;
-      @spinning-triangles-pink
-      @spinning-triangles-mint
-      ;
-      @hept1-white-dots-anim
-      @hept1-pink-anim)))
+      ;@spinning-triangles-pink
+      ;@spinning-triangles-mint
+      ;;
+      ;@hept1-white-dots-anim
+      ;@hept1-pink-anim)))
       ;@shimmer-anim)))
 
-      ;@bg
+      ;@bg)))
       ;@bb)))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;; MOVING HEPTAGONS ;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;@hept1-mint- anim
-      ;@hept1-pink-anim))
+      ;@hept1-mint-anim
+      ;@hept1-pink-anim
       ;@hept1-white-dots-anim
       ;
       ;@anim-hept2-pink
@@ -653,7 +675,7 @@
       ;                                                    (repeat 3 4)))
       ;                             ")")})
       ;     (draw)
-      ;     (when (nth-frame 1 frame)))
+      ;     (when (nth-frame 1 frame))))))
 
       ;;;;;;;;;;;;;;;
       ;;;; SPLASH ;;;
@@ -668,8 +690,8 @@
       ;;;;;;;;;;;;;
       ;(when (nth-frame 4 frame)
       ;  (gen-line-grid pink 6 80 80
-      ;                 {:col 200 :row 200}))
-      ;
+      ;                 {:col 200 :row 200})))))
+
       ;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;; FREAKOUT CIRCLE ;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -686,6 +708,11 @@
       ;; maybe circles are moving too fast
       ;; pick different colors
       ;; fill the screen even more
+      ;; gpu not happy with huge amount of objects -> use blur
+      ;; small balls are good
+      ;; airy colors -> lots of blues
+      ;; more variation
+      ;; come up with build up
       ;
       ;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -701,22 +728,27 @@
       ;(new-freakout @width
       ;              @height
       ;              3
-      ;              (->> (slow-val-cyc 2 [600 500 400 300 200 100 50 100 200 300 400 500])
+      ;              (->> (slow-val-cyc 2 [100 50 25 50 100])
       ;                   (val-cyc frame))
       ;              "testCirc2"))))
-      ;
+
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; ETHER ;;;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;)))
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
       ;; TODOS
       ;; no straight shapes
       ;; like idea of rotation - make it infinite?
       ;; spirals made of circles
+      ;; rough background not ideal use gradient
+      ;; good blur
+      ;; come up with transition
+      ;; make circles blurry
 
       ;(style {:filter (url (:id disappearing))}
       ;@pixie-dust-anim)))
+
       ;@shape-shift-anim)))
       ;@splash-g
       ;@splash-y
