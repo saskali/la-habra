@@ -83,18 +83,18 @@
 
 (make-frames!
   "supercolor"
-  [10, 35, 55, 85, 92]
+  [10 35 55 85 92]
   (make-body "fill" [pink pink yellow midnight midnight]))
 
 (make-frames!
   "colorcolor"
-  [10, 35, 55, 85, 92]
+  [10 35 55 85 92]
   (make-body "fill" (mapv #(pattern (str "noise-" %))
                           [mint mint mint orange orange])))
 
 (make-frames!
   "colorcolorcolor"
-  [10, 35, 55, 85, 92]
+  [10 35 55 85 92]
   (make-body "fill" (mapv #(pattern (str "noise-" %))
                           [navy mint orange pink gray])))
 
@@ -478,7 +478,7 @@
          (draw)
          (when (nth-frame 1 frame)))))
 
-(defn sun-shape [color base-x base-y style s cycle]
+(defn sun-shape [frame color base-x base-y style s cycle]
   (map (fn [[x y r]]
          (let [r (if (and (= 960 base-x) (= 200 base-y))
                    (+ 4 r)
@@ -486,15 +486,15 @@
            (->> (gen-circ color x y r)
                 (style style)
                 (draw))))
-       (take cycle [[base-x (- base-y 80) 18]
-                    [(+ base-x 50) (- base-y 50) 14]
-                    [(+ 80 base-x) base-y 18]
-                    [(+ base-x 50) (+ base-y 55) 14]
-                    [base-x (+ 80 base-y) 18]
-                    [(- base-x 55) (+ base-y 55) 14]
-                    [(- base-x 80) base-y 18]
-                    [(- base-x 55) (- base-y 50) 14]
-                    [base-x base-y 40]])))
+       (concat (take cycle [[base-x (- base-y 80) 18]
+                            [(+ base-x 50) (- base-y 50) 14]
+                            [(+ 80 base-x) base-y 18]
+                            [(+ base-x 50) (+ base-y 55) 14]
+                            [base-x (+ 80 base-y) 18]
+                            [(- base-x 55) (+ base-y 55) 14]
+                            [(- base-x 80) base-y 18]
+                            [(- base-x 55) (- base-y 50) 14]])
+               (when (nth-frame 31 frame) [[base-x base-y 40]]))))
 
 
 ;; ------------------- DRAWING HELPERS ------------------------
@@ -565,43 +565,26 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
       ;; transition from seed to larger circle
-      ;; earth is about stability -> no blinking
-      ;; everything shall be smooth as baby butt
       ;; try 8, 16, 32 for growing circle
       ;; ball movement smooth
-      ;; set colors
       ;; missing sense for resolution
       ;; there doesn't seem to be a climax
       ;; keep big background ball up
       ;; make small structures collapse in themselves and slowly disappear
       ;; collapse big ball on the bottom
 
-      ;@seed
-
       ;;;;;;;;;;;;;;
       ;;; GROUND ;;;
       ;;;;;;;;;;;;;;
-      ;(->> (gen-circ (val-cyc frame (->> (vals blue-set-2)
-      ;                                   (slow-val-cyc 140)))
-      ;               (* 0.5 @width)
-      ;               (* 1.4 @height)
-      ;               (+ 500 (* 200 (mod frame 8))))
-      ;     (draw))
-      ;(->> (gen-circ gray
-      ;               (* 0.5 @width)
-      ;               (* 1.4 @height)
-      ;               (+ (* s 30)
-      ;                  (->> (slow-val-cyc 8 [550 600 650 700]);; [700 700 550 700]
-      ;                       (val-cyc frame))))
-      ;     (draw))
-           ;(when (or (nth-frame 8 frame)
-           ;          (nth-frame 9 frame)))))))
+      ;@expanding-circle
+      ;@seed
+      ;@earth)))
 
-      ;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;
       ;;; SUN-SHAPES ;;;
       ;;;;;;;;;;;;;;;;;;
       ;(map (fn [[x y]]
-      ;       (sun-shape midnight x y {} s (val-cyc frame (->> (range 1 10) (slow-val-cyc 8)))))
+      ;       (sun-shape frame midnight x y {} s (val-cyc frame (->> (range 1 9) (slow-val-cyc 4)))))
       ;     [[360 200] [660 300] [960 200] [1260 300] [1560 200]
       ;      [960 500] [460 500] [1460 500]
       ;      [700 700] [1200 700]])

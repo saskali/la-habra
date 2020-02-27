@@ -159,7 +159,7 @@
 (make-frames!
   "etof"
   [0 100]
-  (make-body "transform" ["translateY(10px)" "translateY(1000px)"]))
+  (make-body "transform" ["translateY(10px)" "translateY(1080px)"]))
 
 (make-frames!
   "etof2"
@@ -171,6 +171,33 @@
 
 (back-and-forth! "scaley" "scale(1)" "scale(15)")
 (back-and-forth! "scaley-huge" "scale(20)" "scale(50)")
+
+(make-frames!
+  "scaley-up"
+  [0 25 50 75 100]
+  (make-body "transform" ["scale(1)"
+                          "scale(1.5)"
+                          "scale(2)"
+                          "scale(2.5)"
+                          "scale(3)"]))
+
+(make-frames!
+  "pulse"
+  [0 25 50 75 100]
+  (make-body "transform" ["scale(1.3)"
+                          "scale(1.3)"
+                          "scale(1.3)"
+                          "scale(1)"
+                          "scale(1.3)"]))
+
+(make-frames!
+  "pulse2"
+  [0 25 50 75 100]
+  (make-body "transform" ["scale(1)"
+                          "scale(1.075)"
+                          "scale(1.15)"
+                          "scale(1.225)"
+                          "scale(1.3)"]))
 
 (a-to-b! "new-fi" "fill-opacity" "0" ".5")
 
@@ -186,7 +213,7 @@
 
 (make-frames!
   "woosh"
-  [10, 35, 55, 85, 92]
+  [10 35 55 85 92]
   (make-body "transform" ["translate(80vw, 50vh) rotate(2deg) scale(1.2)"
                           "translate(60vw, 60vh) rotate(-200deg) scale(2.4)"
                           "translate(40vw, 40vh) rotate(120deg) scale(4.4)"
@@ -204,8 +231,8 @@
 
 (make-frames!
   "woosh-3"
-  [10, 55, 85, 92]
-  (make-body "transform" ["translate(80vw, 10vh) rotate(2deg) scale(2.2)"
+  [10 55 85 92]
+  (make-body "transform" ["translate(60vw, 10vh) rotate(2deg) scale(2.2)"
                           "translate(40vw, 40vh) rotate(120deg) scale(8.4)"
                           "translate(50vw, 30vh) rotate(0deg) scale(12.2)"
                           "translate(60vw, 80vh) rotate(400deg) scale(4.2)"]))
