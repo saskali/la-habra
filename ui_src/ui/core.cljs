@@ -5,7 +5,8 @@
             [ui.shapes :refer [tri square pent hex hept oct
                                b1 b2 b3 b4
                                semi-circle]]
-            [ui.fills :refer [gray mint navy blue midnight orange pink white yellow blue-set-2]]
+            [ui.fills :refer [gray mint navy blue midnight orange pink white yellow
+                              earth-colors water-colors blue-set-2 color-set-2]]
             [ui.generators :refer [freak-out new-freakout freak-out-waves scatter lerp draw
                                    gen-circ gen-line gen-poly gen-rect gen-shape gen-half-circ
                                    gen-group gen-offset-lines gen-bg-lines gen-mask
@@ -96,6 +97,12 @@
   [10, 35, 55, 85, 92]
   (make-body "fill" (mapv #(pattern (str "noise-" %))
                           [navy mint orange pink gray])))
+
+(make-frames!
+  "earthcolors"
+  [0 25 50 75 100]
+  (let [{:keys [dark-purple purple light-purple]} earth-colors]
+    (make-body "fill" [dark-purple purple light-purple purple dark-purple])))
 
 (make-frames!
   "morph"

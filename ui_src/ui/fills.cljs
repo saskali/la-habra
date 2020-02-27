@@ -12,6 +12,28 @@
 (def white "#e4e4e7")
 (def yellow "#FFCD37")
 
+;;;;;;;;;;;
+;; EARTH ;;
+;;;;;;;;;;;
+(def earth-colors
+  {:dark-purple "#5A275E"
+   :purple "#881091"
+   :light-purple "#805EB8"
+   :midnight "#1E162B"
+   :mud "#38362B"
+   :khaki "#AB8F35"
+   :blue "#6685B5"
+   :green "#787525"})
+
+;;;;;;;;;;;
+;; WATER ;;
+;;;;;;;;;;;
+(def water-colors
+  {:brown "#AB630A"
+   :orange "#F7951E"
+   :light-orange "#FFA538"
+   :dark-blue "#0073AB"
+   :blue "#1EB0F7"})
 
 ;; color set: blue - red - caramel
 (def color-set-1
