@@ -42,6 +42,12 @@
 
 ;(hide-display) ;; hides heads up display for performance
 
+(defn bpm->ms [bpm]
+  (quot 60000 bpm))
+
+(def bpm (r/atom 90))
+(def ms (-> @bpm bpm->ms (/ 1000) r/atom))
+
 (def width (r/atom 1920)) ;;(atom (.-innerWidth js/window)))
 (def height (r/atom 1080)) ;;(atom (.-innerHeight js/window)))
 
@@ -114,23 +120,46 @@
 ;; --------------- ATOMS STORAGE --------------------
 
 (def seed
-  (->> (gen-circ gray (quot @width 2) 10 30)
-       (anim "etof" "80s" 1)
+  (->> (gen-circ (get earth-colors :khaki)
+                 (quot @width 2)
+                 -40
+                 30)
+       (anim "etof" 200 @ms "1")
+       (draw)
+       (r/atom)))
+
+(def earth
+  (->> (gen-circ (get earth-colors :blue)
+                 (* 0.5 @width)
+                 (* 1.4 @height)
+                 560)
+       ;(anim "pulse" 32 @ms "2")
+       (anim "pulse2" 32 @ms "infinite")
+       (draw)
+       (r/atom)))
+
+(def expanding-circle
+  (->> (gen-circ (get earth-colors :dark-purple)
+                 (* 0.5 @width)
+                 (* 1.4 @height)
+                 600)
+       (style {:animation "earthcolors 5.328s linear infinite, scaley-up 5.328s linear infinite"})
+               ;:transform-origin "center" :transform "scale(3)"})
        (draw)
        (r/atom)))
 
 (def drops
   (-> (fn [delay]
         (->> (gen-rect gray (+ 30 (* delay 160)) 5 200 36)
-             (anim "etof" "1.2s" "infinite" {:delay (str (* 0.5 delay) "s")})
+             (anim "etof" 2 @ms "infinite" {:delay (str (* 0.5 delay) "s")})
              (draw)))
       (map (range 20))
       (r/atom)))
 
 (def drops2
   (-> (fn [delay]
-        (->> (gen-circ gray (+ 30 (* delay 160)) 5 10)
-             (anim "etof2" "1.2s" "infinite" {:delay (str (* 0.25 delay) "s")})
+        (->> (gen-circ (get water-colors :blue) (+ 30 (* delay 160)) 5 10)
+             (anim "etof2" 2 @ms "infinite" {:delay (str (* 0.25 delay) "s")})
              (draw)))
       (map (range 10))
       (r/atom)))
@@ -138,14 +167,14 @@
 (def hept1-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
        (style {:transform-origin "center" :transform "scale(1.6)"})
-       (anim "woosh-5" "4s" "infinite")
+       (anim "woosh-5" 8 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def hept1-pink-anim
   (->> (gen-shape (pattern pink) hept)
        (style {:mix-blend-mode "difference"})
-       (anim "woosh-5" "4s" "infinite")
+       (anim "woosh-5" 8 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -154,21 +183,21 @@
        (style {:mix-blend-mode "difference"
                :transform-origin "center"
                :transform "scale(1.8)"})
-       (anim "woosh-6" "4s" "infinite")
+       (anim "woosh-6" 8 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def hept2-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
        (style {:transform-origin "center" :transform "scale(1.4)"})
-       (anim "woosh-7" "4s" "infinite")
+       (anim "woosh-7" 8 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def hept2-mint-anim
   (->> (gen-shape mint hept)
        (style {:mix-blend-mode "difference"})
-       (anim "woosh-8" "4s" "infinite")
+       (anim "woosh-8" 8 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -177,7 +206,7 @@
        (style {:mix-blend-mode "difference"
                :transform-origin "center"
                :transform "scale(1.8)"})
-       (anim "woosh-8" "4s" "infinite")
+       (anim "woosh-8" 8 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -185,7 +214,7 @@
   (->> (gen-shape orange hept)
        (style {:transform "translate(30vw, 44vh) scale(2.4)"})
        (style {:mix-blend-mode "color-burn"})
-       (anim "woosh-3" "3s" "infinite")
+       (anim "woosh-3" 6 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -198,7 +227,7 @@
                :opacity 0.4
                :transform-origin "center"
                :transform "scale(4)"})
-       (anim "sc-rot" "20s" "infinite" {:timing "linear"})
+       (anim "sc-rot" 40 @ms "infinite" {:timing "linear"})
        (draw)
        (r/atom)))
 
@@ -207,7 +236,7 @@
                  {:col 20 :row 20}
                  (gen-shape mint oct))
        (map #(style {:mix-blend-mode "difference"}  %))
-       (map #(anim "supercolor" (str (rand-int 50) "s") "infinite" %))
+       (map #(anim "supercolor" (rand-int 100) @ms "infinite" %))
        (map draw)
        (map #(gen-group {:style {:transform-origin "center"
                                  :transform (str "rotate(" (rand-int 360) "deg)"
@@ -219,7 +248,7 @@
                  {:col 20 :row 20}
                  (gen-shape mint oct))
        (map #(style {:mix-blend-mode "difference"}  %))
-       (map #(anim "supercolor" (str (rand-int 50) "s") "infinite" %))
+       (map #(anim "supercolor" (rand-int 100) @ms "infinite" %))
        (map draw)
        (r/atom)))
 
@@ -229,7 +258,7 @@
                  (gen-shape mint oct))
        (map #(style {:mix-blend-mode "difference"
                      :opacity 0.1}  %))
-       (map #(anim "supercolor" (str (rand-int 50) "s") "infinite" %))
+       (map #(anim "supercolor" (rand-int 100) @ms "infinite" %))
        (map draw)
        (map #(gen-group {:style {:transform-origin "center"
                                  :transform (str "rotate(" (rand-int 360) "deg)"
@@ -241,7 +270,7 @@
        (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"})
        (style {:mix-blend-mode "difference" :filter (url (:id noiz))})
        ;(style {:mix-blend-mode "difference"})
-       (anim "morph" "8s" "infinite")
+       (anim "morph" 16 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -250,14 +279,14 @@
        (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"})
        ;(style {:mix-blend-mode "color-dodge" :filter (url (:id noiz))} )
        (style {:mix-blend-mode "color-dodge"})
-       (anim "woosh" "2s" "infinite")
+       (anim "woosh" 4 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def bb5
   (->> (gen-shape mint oct)
        (style {:transform "translate(10vw, 30vh) scale(2) rotate(45deg)"
-               :animation "morph2 6s infinite, fade-in-out 6s infinite, woosh-3 8s infinite"
+               :animation "woosh-3 10.656s linear infinite"
                :mix-blend-mode "luminosity"})
        (draw)
        (r/atom)))
@@ -266,14 +295,14 @@
   (->> (gen-shape (pattern (:id pink-dots)) oct)
        (style {:transform "translate(10vw, 30vh) scale(2.4)"})
        (style {:mix-blend-mode "color-burn"})
-       (anim "woosh-3" "3s" "infinite")
+       (anim "woosh-3" 6 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def scale-me
   (->> (gen-rect (pattern (str "noise-" yellow)) 0 0 @width @height)
        (style {:transform "scale(50)"})
-       (anim "scaley-huge" "5s" "infinite")
+       (anim "scaley-huge" 10 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -289,13 +318,13 @@
                  (* 0.5 @width)
                  (* 0.4 @height)
                  100)
-       (anim "scaley" "5s" "infinite")
+       (anim "scaley" 10 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def mf
   (->> (gen-shape white tri)
-       (anim "morph" "6s" "infinite")
+       (anim "morph" 12 @ms "infinite")
        (style {:opacity 0.7
                :mix-blend-mode "difference"})
        (draw)
@@ -318,7 +347,7 @@
   (->>
     (gen-poly (:aquamarine blue-set-2) [100 100 400 400 300 100 200 50])
     (style {:opacity 0.7})
-    (anim "woosh" "10s" "infinite")
+    (anim "woosh" 20 @ms "infinite")
     (draw)
     (r/atom)))
 
@@ -328,7 +357,7 @@
                  {:col 100 :row 150}
                  (->> (gen-shape mint tri)))
        ;(map #(style styles %))
-       ; map #(anim "rot" "10s" "infinite" %))
+       ; map #(anim "rot" 20 @ms "infinite" %))
        (map draw)
        (map #(gen-group {:style {:transform-origin "center"
                                  :transform "scale(2)"}} %))
@@ -342,7 +371,7 @@
                  {:col 100 :row 150}
                  (->> (gen-shape yellow tri)))
        (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
-       (map #(anim "morph" "5s" "infinite" %))
+       (map #(anim "morph" 10 @ms "infinite" %))
        (map draw)
        (map #(gen-group {:style {:transform-origin "center"
                                  :transform "scale(2)"}} %))
@@ -358,7 +387,7 @@
                          {:col 100 :row 150}
                          (->> (gen-shape pink tri)))
                ;(map #(style styles %))
-               ;(map #(anim "rot" "10s" "infinite" %))
+               ;(map #(anim "rot" 20 @ms "infinite" %))
                (map draw)
                (map #(gen-group {:style {:transform-origin "center"
                                          :transform "translate(-120px, -50px) scale(2)"}} %))
@@ -371,7 +400,7 @@
                          {:col 100 :row 150}
                          (->> (gen-shape yellow tri)))
                (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
-               (map #(anim "morph" "5s" "infinite" %))
+               (map #(anim "morph" 10 @ms "infinite" %))
                (map draw)
                (map #(gen-group {:style {:transform-origin "center"
                                          :transform "scale(2)"}} %))
@@ -768,7 +797,7 @@
 (when-not DEBUG
   (defonce start-cx-timer
     (js/setInterval
-      #(reset! collection (cx @frame)) 66.6))
+      #(reset! collection (cx @frame)) (/ @ms 10)))
 
   ;(defonce start-cx-timer-2
   ;  (js/setInterval
@@ -776,7 +805,7 @@
 
   (defonce start-frame-timer
     (js/setInterval
-      #(swap! frame inc) 666)))
+      #(swap! frame inc) @ms)))
 
 
 ;; ----------- DEFS AND DRAW ------------------------------
