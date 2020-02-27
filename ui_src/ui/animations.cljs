@@ -281,6 +281,59 @@
                           "translate(80vw, 45vh) rotate(-300deg) scale(2.2)"
                           "translate(10vw, 50vh) rotate(0deg) scale(2.2)"]))
 
+(make-frames!
+  "spiral1"
+  [0 50 100]
+  (make-body "transform" ["rotate(0deg) translate(10vw, 30vh) rotate(0deg)"
+                          "rotate(360deg) translate(0px) rotate(-360deg)"
+                          "rotate(0deg) translate(10vw, 30vh) rotate(0deg)"]))
+
+(make-frames!
+  "spiral2"
+  [0 50 100]
+  (make-body "transform" ["rotate(120deg) translate(10vw, 30vh) rotate(-120deg)"
+                          "rotate(480deg) translate(0px) rotate(-480deg)"
+                          "rotate(120deg) translate(10vw, 30vh) rotate(-120deg)"]))
+
+(make-frames!
+  "spiral3"
+  [0 50 100]
+  (make-body "transform" ["rotate(240deg) translate(10vw, 30vh) rotate(-240deg)"
+                          "rotate(600deg) translate(0px) rotate(-600deg)"
+                          "rotate(240deg) translate(10vw, 30vh) rotate(-240deg)"]))
+
+(make-frames!
+  "spiral4"
+  [0 50 100]
+  (make-body "transform" ["rotate(60deg) translate(10vw, 30vh) rotate(-60deg)"
+                          "rotate(420deg) translate(0px) rotate(-420deg)"
+                          "rotate(60deg) translate(10vw, 30vh) rotate(-60deg)"]))
+
+(make-frames!
+  "spiral5"
+  [0 50 100]
+  (make-body "transform" ["rotate(180deg) translate(10vw, 30vh) rotate(-180deg)"
+                          "rotate(540deg) translate(0px) rotate(-540deg)"
+                          "rotate(180deg) translate(10vw, 30vh) rotate(-180deg)"]))
+
+(make-frames!
+  "spiral6"
+  [0 50 100]
+  (make-body "transform" ["rotate(300deg) translate(10vw, 30vh) rotate(-300deg)"
+                          "rotate(660deg) translate(0px) rotate(-660deg)"
+                          "rotate(300deg) translate(10vw, 30vh) rotate(-300deg)"]))
+
+(defn transform-values [[x y scale]]
+  (str "translate(" x "vw, " y "vh) scale(" scale ")"))
+
+(make-frames!
+  "move-across2"
+  [0 25 50 75 100]
+  (make-body "transform" (map transform-values [[50 75 1]
+                                                [75 50 1]
+                                                [50 25 1]
+                                                [25 50 1]
+                                                [50 75 1]])))
 
 (make-frames!
   "loopy-left"
