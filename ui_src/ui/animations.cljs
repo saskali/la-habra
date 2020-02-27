@@ -64,12 +64,12 @@
 ;; -------------------- SHAPE ANIMATION HELPER ---------------------------
 
 (defn anim
-  ([name duration count shape] (anim name duration count {} shape))
-  ([name duration count opts shape]
+  ([name duration ms count shape] (anim name duration ms count {} shape))
+  ([name duration ms count opts shape]
    (let [animations
          { :animation-name name
            :animation-fill-mode "forwards"
-           :animation-duration duration
+           :animation-duration (str (* duration ms) "s")
            :animation-iteration-count count
            :animation-delay (or (:delay opts) 0)
            :animation-timing-function (or (:timing opts) "ease")}]
