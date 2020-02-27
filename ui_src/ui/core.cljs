@@ -171,6 +171,42 @@
       (map (range 10))
       (r/atom)))
 
+(def spiral-ball1
+  (->> (gen-circ (get water-colors :blue) (* 0.5 @width) (* 0.5 @height) 20)
+       (anim "spiral1" (-> (rand-int 5) (+ 4)) @ms "infinite" {:timing "linear"})
+       (draw)
+       (r/atom)))
+
+(def spiral-ball2
+  (->> (gen-circ (get water-colors :light-orange) (* 0.5 @width) (* 0.5 @height) 30)
+       (anim "spiral2" (-> (rand-int 5) (+ 4)) @ms "infinite" {:timing "linear"})
+       (draw)
+       (r/atom)))
+
+(def spiral-ball3
+  (->> (gen-circ (get water-colors :orange) (* 0.5 @width) (* 0.5 @height) 40)
+       (anim "spiral3" (-> (rand-int 5) (+ 4)) @ms "infinite" {:timing "linear"})
+       (draw)
+       (r/atom)))
+
+(def spiral-ball4
+  (->> (gen-circ (get water-colors :blue) (* 0.5 @width) (* 0.5 @height) 50)
+       (anim "spiral4" (-> (rand-int 5) (+ 4)) @ms "infinite" {:timing "linear"})
+       (draw)
+       (r/atom)))
+
+(def spiral-ball5
+  (->> (gen-circ (get water-colors :light-orange) (* 0.5 @width) (* 0.5 @height) 60)
+       (anim "spiral5" (-> (rand-int 5) (+ 4)) @ms "infinite" {:timing "linear"})
+       (draw)
+       (r/atom)))
+
+(def spiral-ball6
+  (->> (gen-circ (get water-colors :orange) (* 0.5 @width) (* 0.5 @height) 70)
+       (anim "spiral6" (-> (rand-int 5) (+ 4)) @ms "infinite" {:timing "linear"})
+       (draw)
+       (r/atom)))
+
 (def hept1-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
        (style {:transform-origin "center" :transform "scale(1.6)"})
@@ -377,7 +413,7 @@
   (->> (gen-grid 20 30
                  {:col 100 :row 150}
                  (->> (gen-shape yellow tri)))
-       (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
+       (map #(style {:opacity 1 :mix-blend-mode "difference"} %))
        (map #(anim "morph" 10 @ms "infinite" %))
        (map draw)
        (map #(gen-group {:style {:transform-origin "center"
@@ -406,7 +442,7 @@
   (r/atom (->> (gen-grid 20 30
                          {:col 100 :row 150}
                          (->> (gen-shape yellow tri)))
-               (map  #(style {:opacity 1 :mix-blend-mode "difference"} %))
+               (map #(style {:opacity 1 :mix-blend-mode "difference"} %))
                (map #(anim "morph" 10 @ms "infinite" %))
                (map draw)
                (map #(gen-group {:style {:transform-origin "center"
@@ -554,7 +590,7 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
            ;(style {:opacity 0.9})
-           (draw)))))
+           (draw))
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -610,12 +646,24 @@
       ;; blur noise circ anim -> go forwards and backwards for continuity
       ;; bb5 is too predictable kind of repeatedly too sharp -> random movement
 
+      (when (and (< 7 (mod frame 16))
+                 (> 15 (mod frame 16)))
+        (freak-out 1920 1080 10 100 (get water-colors :orange)))
 
+      (when (< 32 (mod frame 128))
+        @drops2))))
+      ;
+      ;@spiral-ball1
+      ;@spiral-ball2
+      ;@spiral-ball3
+      ;@spiral-ball4
+      ;@spiral-ball5
+      ;@spiral-ball6)))
 
       ;; (style {:filter (url (:id turb))}
-      ;(gen-grid)
+
       ;@bb5)))
-      ;@drops2
+
       ;@noise-circ-anim)))
       ;
       ;(gen-bg-lines dark-green
