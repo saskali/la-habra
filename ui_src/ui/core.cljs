@@ -235,14 +235,14 @@
 (def hept1-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
        (style {:transform-origin "center" :transform "scale(1.6)"})
-       (anim "woosh-5" 8 @ms "infinite")
+       (anim "woosh-6" 4 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def hept1-pink-anim
   (->> (gen-shape (pattern pink) hept)
        (style {:mix-blend-mode "difference"})
-       (anim "woosh-5" 8 @ms "infinite")
+       (anim "woosh-5" 4 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -251,21 +251,21 @@
        (style {:mix-blend-mode "difference"
                :transform-origin "center"
                :transform "scale(1.8)"})
-       (anim "woosh-6" 8 @ms "infinite")
+       (anim "woosh-6" 4 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def hept2-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
        (style {:transform-origin "center" :transform "scale(1.4)"})
-       (anim "woosh-7" 8 @ms "infinite")
+       (anim "woosh-7" 4 @ms "infinite")
        (draw)
        (r/atom)))
 
 (def hept2-mint-anim
   (->> (gen-shape mint hept)
        (style {:mix-blend-mode "difference"})
-       (anim "woosh-8" 8 @ms "infinite")
+       (anim "woosh-8" 4 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -450,18 +450,18 @@
        (r/atom)))
 
 (def spinning-triangles-pink
-  (r/atom (->> (gen-grid 20
-                         30
-                         {:col 100 :row 150}
+  (r/atom (->> (gen-grid 3
+                         2
+                         {:col 400 :row 300}
                          (->> (gen-shape pink tri)))
                ;(map #(style styles %))
                ;(map #(anim "rot" 20 @ms "infinite" %))
                (map draw)
                (map #(gen-group {:style {:transform-origin "center"
-                                         :transform "translate(-120px, -50px) scale(2)"}} %))
+                                         :transform "translate(0px, 50px) scale(2)"}} %))
                (map #(gen-group {:mask (url "bitey")
                                  :style {:transform-origin "center"
-                                         :animation "smooth-rot 8s infinite linear"}} %)))))
+                                         :animation "smooth-rot 1s linear infinite"}} %)))))
 
 (def spinning-triangles-pink2
   (r/atom (->> (gen-grid 20 30
@@ -479,14 +479,15 @@
 
 (def spinning-triangles-mint
   (r/atom (->> (gen-grid 30
-                         6
+                         1
                          {:col 60 :row 180}
                          (->> (gen-shape mint tri)))
                (map draw)
                (map #(gen-group {:style {:mix-blend-mode "difference"
                                          :transform-origin "center"
-                                         :transform "translate(-120px, 0) scale(2)"
-                                         :animation "smooth-rot 8s infinite linear"}} %)))))
+                                         :animation (str "zig-zag "
+                                                         (* 4 @ms)
+                                                         "s linear infinite")}} %)))))
 
 ;;;;;;;;;;;;;;
 ;; SPLASHES ;;
@@ -605,7 +606,11 @@
 
 (defn cx [frame]
   (let
-    [colors (slow-val-cyc 12 [midnight]);; orange pink yellow
+    [colors [(:dark-blue water-colors)];(slow-val-cyc 16 (->> earth-colors vals (take 4) vec)) (get earth-colors :dark-purple)
+            ;(slow-val-cyc 12 [midnight]) (:dark-blue water-colors)
+            ;(slow-val-cyc 12 [midnight])
+            ;(slow-val-cyc 12 [midnight])
+            ;(slow-val-cyc 12 [midnight])
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
      s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
 
@@ -666,26 +671,26 @@
       ;; grid of dots feels out of place -> too predictable -> maybe random -> colors of the balls are orange
       ;; blur noise circ anim -> go forwards and backwards for continuity
       ;; bb5 is too predictable kind of repeatedly too sharp -> random movement
-
-      (gen-bg-lines (:blue water-colors)
-                    (mod frame 70)
-                    {:opacity 0.4})
-
-      (when (< 3 (mod frame 8))
-        (freak-out 1920 1080 10 100 (get water-colors :orange)))
-
-      (when (> (mod frame 16) 4)
-        @drops2)
-
-      (when (nth-frame 4 frame)
-        @(frame-flimmer-shapes))
-
-      @spiral-ball1
-      @spiral-ball2
-      @spiral-ball3
-      @spiral-ball4
-      @spiral-ball5
-      @spiral-ball6)))
+      ;
+      ;(gen-bg-lines (:blue water-colors)
+      ;              (mod frame 70)
+      ;              {:opacity 0.4})
+      ;
+      ;(when (< 3 (mod frame 8))
+      ;  (freak-out 1920 1080 10 100 (get water-colors :orange)))
+      ;
+      ;(when (> (mod frame 16) 4)
+      ;  @drops2)
+      ;
+      ;(when (nth-frame 4 frame)
+      ;  @(frame-flimmer-shapes))
+      ;
+      ;@spiral-ball1
+      ;@spiral-ball2
+      ;@spiral-ball3
+      ;@spiral-ball4
+      ;@spiral-ball5
+      ;@spiral-ball6)))
 
       ;;; (style {:filter (url (:id turb))}
       ;
@@ -710,7 +715,7 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; FIRE ;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;@oct-grid-anim
+
       ;; TODOS
       ;; might keep some elements between phases
       ;; first thing that gets in musically: congas
@@ -721,12 +726,14 @@
       ;; like explosion of colors -> more red though
       ;; shape that moves too predictable -> get in old hept merging thing
       ;
-      ;@spinning-triangles-pink
-      ;@spinning-triangles-mint
-      ;;
-      ;@hept1-white-dots-anim
-      ;@hept1-pink-anim)))
-      ;@shimmer-anim)))
+      @oct-grid-anim
+
+      (when (or (= 0 (mod frame 4))
+                (= 2 (mod frame 4)))
+        (new-freakout @width @height 1 50 "mypent"))
+
+      @spinning-triangles-pink
+      @spinning-triangles-mint
 
       ;@bg)))
       ;@bb)))
@@ -734,11 +741,11 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;; MOVING HEPTAGONS ;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;@hept1-mint-anim
-      ;@hept1-pink-anim
-      ;@hept1-white-dots-anim
-      ;
-      ;@anim-hept2-pink
+      @hept1-mint-anim
+      @hept1-pink-anim
+      @hept1-white-dots-anim)))
+
+      ;@anim-hept2-pink)))
       ;@anim-hept2-mint
       ;@anim-hept2-white-dots
       ;
@@ -1005,6 +1012,16 @@
                :cx 0 :cy 0 :r 100
                :style {:animation "colorcolorcolor 10s infinite"
                        :fill (pattern (str "noise-" yellow))}}]
+
+     [:circle {:id "testCirc3"
+               :cx 0 :cy 0 :r 100
+               :style {:animation "colorcolorcolor 10s infinite"
+                       :fill (pattern (str "noise-" yellow))}}]
+
+     [:path {:id "mypent"
+             :d pent
+             :fill "#DFDC16"
+             :style {:transform "scale(0.1)"}}]
 
      (map identity gradients)
      (map identity masks)
