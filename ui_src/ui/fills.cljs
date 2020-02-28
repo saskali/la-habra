@@ -31,6 +31,7 @@
    :orange "#F7951E"
    :light-orange "#FFA538"
    :dark-blue "#0073AB"
+   :dark-dark-blue "#1C2145"
    :blue "#1EB0F7"})
 
 ;; color set: blue - red - caramel

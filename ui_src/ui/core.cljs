@@ -170,7 +170,7 @@
 
 (def drops2
   (-> (fn [delay]
-        (->> (gen-circ (get water-colors :blue) (+ 30 (* delay 160)) 5 10)
+        (->> (gen-circ white (+ 30 (* delay 160)) -10 10)
              (anim "etof2" 2 @ms "infinite" {:delay (str (* 0.25 delay) "s")})
              (draw)))
       (map (range 10))
@@ -211,6 +211,26 @@
        (anim "spiral6" (-> (rand-int 5) (+ 4)) @ms "infinite" {:timing "linear"})
        (draw)
        (r/atom)))
+
+(defn frame-flimmer-shapes []
+  (let [left? (rand-int 2)
+        up? (rand-int 2)
+        shift (rand-int 11)
+        x (if (zero? left?)
+            (+ 10 shift)
+            (- 80 shift))
+        y (if (zero? up?)
+            (+ 10 shift)
+            (- 75 shift))]
+    (->> (gen-shape (:dark-dark-blue water-colors) (rand-nth [hex hept oct]))
+         (style {:opacity 0.8
+                 :transform (str "translate("
+                                 x
+                                 "vw, "
+                                 y
+                                 "vh) rotate(45deg)")})
+         (draw)
+         (r/atom))))
 
 (def hept1-white-dots-anim
   (->> (gen-shape (pattern (:id white-dots)) hept)
@@ -647,30 +667,34 @@
       ;; blur noise circ anim -> go forwards and backwards for continuity
       ;; bb5 is too predictable kind of repeatedly too sharp -> random movement
 
-      (when (and (< 7 (mod frame 16))
-                 (> 15 (mod frame 16)))
+      (gen-bg-lines (:blue water-colors)
+                    (mod frame 70)
+                    {:opacity 0.4})
+
+      (when (< 3 (mod frame 8))
         (freak-out 1920 1080 10 100 (get water-colors :orange)))
 
-      (when (< 32 (mod frame 128))
-        @drops2))))
+      (when (> (mod frame 16) 4)
+        @drops2)
+
+      (when (nth-frame 4 frame)
+        @(frame-flimmer-shapes))
+
+      @spiral-ball1
+      @spiral-ball2
+      @spiral-ball3
+      @spiral-ball4
+      @spiral-ball5
+      @spiral-ball6)))
+
+      ;;; (style {:filter (url (:id turb))}
       ;
-      ;@spiral-ball1
-      ;@spiral-ball2
-      ;@spiral-ball3
-      ;@spiral-ball4
-      ;@spiral-ball5
-      ;@spiral-ball6)))
-
-      ;; (style {:filter (url (:id turb))}
-
       ;@bb5)))
-
+      ;
       ;@noise-circ-anim)))
-      ;
-      ;(gen-bg-lines dark-green
-      ;              (mod frame 70)
-      ;              {:opacity (-> (mod frame 2) (/ 10) (+ 0.6))})
-      ;
+
+
+
       ;(gen-cols brown-red (* 6 (mod frame 10)) 60 60)
       ;
       ;(->> (gen-grid 20 20
