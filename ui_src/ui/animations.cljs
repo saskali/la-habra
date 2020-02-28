@@ -247,21 +247,29 @@
 
 (make-frames!
   "woosh-5"
-  [20, 40, 60, 80, 100]
-  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(1.2)"
-                          "translate(45vw, 45vh) rotate(-200deg) scale(1.8)"
-                          "translate(80vw, 80vh) rotate(0deg) scale(4.2)"
-                          "translate(60vw, 20vh) rotate(-300deg) scale(2.4)"
-                          "translate(20vw, 40vh) rotate(0deg) scale(1.8)"]))
+  [0 12 25 38 50 62 75 88 100]
+  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(4.4)"
+                          "translate(45vw, 45vh) rotate(-200deg) scale(0.4)"
+                          "translate(80vw, 80vh) rotate(100deg) scale(2.8)"
+                          "translate(60vw, 20vh) rotate(-300deg) scale(2.6)"
+                          "translate(20vw, 40vh) rotate(45deg) scale(4)"
+                          "translate(40vw, 10vh) rotate(-120deg) scale(1)"
+                          "translate(80vw, 32vh) rotate(90deg) scale(1.2)"
+                          "translate(42vw, 77vh) rotate(180deg) scale(1.5)"
+                          "translate(10vw, 60vh) rotate(2deg) scale(3.8)"]))
 
 (make-frames!
   "woosh-6"
-  [20, 40, 60, 80, 100]
-  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(0.6)"
-                          "translate(45vw, 45vh) rotate(-200deg) scale(2.2)"
-                          "translate(80vw, 80vh) rotate(0deg) scale(3.8)"
-                          "translate(60vw, 20vh) rotate(-300deg) scale(3.2)"
-                          "translate(20vw, 40vh) rotate(0deg) scale(2.2)"]))
+  [0 12 25 38 50 62 75 88 100]
+  (make-body "transform" ["translate(10vw, 60vh) rotate(2deg) scale(3.8)"
+                          "translate(45vw, 45vh) rotate(-200deg) scale(0.8)"
+                          "translate(80vw, 80vh) rotate(100deg) scale(2.4)"
+                          "translate(60vw, 20vh) rotate(-300deg) scale(0)"
+                          "translate(20vw, 40vh) rotate(45deg) scale(2.6)"
+                          "translate(40vw, 10vh) rotate(-120deg) scale(0.2)"
+                          "translate(80vw, 32vh) rotate(90deg) scale(2.8)"
+                          "translate(42vw, 77vh) rotate(180deg) scale(0.6)"
+                          "translate(10vw, 60vh) rotate(2deg) scale(3.8)"]))
 
 (make-frames!
   "woosh-7"
@@ -323,17 +331,26 @@
                           "rotate(660deg) translate(0px) rotate(-660deg)"
                           "rotate(300deg) translate(10vw, 30vh) rotate(-300deg)"]))
 
-(defn transform-values [[x y scale]]
-  (str "translate(" x "vw, " y "vh) scale(" scale ")"))
+(defn transform-values [[x y scale rotation]]
+  (str "translate(" x "vw, " y "vh) scale(" scale ") rotate(" rotation "deg)"))
 
 (make-frames!
   "move-across2"
   [0 25 50 75 100]
-  (make-body "transform" (map transform-values [[50 75 1]
-                                                [75 50 1]
-                                                [50 25 1]
-                                                [25 50 1]
-                                                [50 75 1]])))
+  (make-body "transform" (map transform-values [[50 75 1 0]
+                                                [75 50 1 0]
+                                                [50 25 1 0]
+                                                [25 50 1 0]
+                                                [50 75 1 0]])))
+
+(make-frames!
+  "zig-zag"
+  [0 25 50 75 100]
+  (make-body "transform" (map transform-values [[-15 -15 2 0]
+                                                [25 25 2 90]
+                                                [-15 50 2 180]
+                                                [25 75 2 270]
+                                                [-15 100 2 360]])))
 
 (make-frames!
   "loopy-left"
