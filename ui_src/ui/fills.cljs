@@ -9,21 +9,19 @@
 (def midnight "#1E162B")
 (def orange "#F28705")
 (def pink "#A62D65")
-(def white "#e4e4e7")
+(def white "#FFFFFF")
 (def yellow "#FFCD37")
 
 ;;;;;;;;;;;
 ;; EARTH ;;
 ;;;;;;;;;;;
 (def earth-colors
-  {:dark-purple "#5A275E"
-   :purple "#881091"
-   :light-purple "#805EB8"
-   :midnight "#1E162B"
-   :mud "#38362B"
-   :khaki "#AB8F35"
+  {:midnight "#1E162B"
+   :dark-purple "#492B78"
+   :purple "#662F82"
+   :light-purple "#672C6B"
    :blue "#6685B5"
-   :green "#787525"})
+   :gold "#C29232"})
 
 ;;;;;;;;;;;
 ;; WATER ;;
