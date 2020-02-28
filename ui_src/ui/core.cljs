@@ -127,7 +127,7 @@
 ;; --------------- ATOMS STORAGE --------------------
 
 (def seed
-  (->> (gen-circ (get earth-colors :khaki)
+  (->> (gen-circ (get earth-colors :gold)
                  (quot @width 2)
                  -40
                  30)
@@ -150,7 +150,12 @@
                  (* 0.5 @width)
                  (* 1.4 @height)
                  600)
-       (style {:animation "earthcolors 5.328s linear infinite, scaley-up 5.328s linear infinite"})
+       (style {:animation (str "earthcolors "
+                               (* 16 @ms)
+                               "s linear infinite, "
+                               "scaley-up "
+                               (* 16 @ms)
+                               "s linear infinite")})
                ;:transform-origin "center" :transform "scale(3)"})
        (draw)
        (r/atom)))
@@ -600,9 +605,6 @@
       ;;;;;;;;;; EARTH ;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;; transition from seed to larger circle
-      ;; try 8, 16, 32 for growing circle
-      ;; ball movement smooth
       ;; missing sense for resolution
       ;; there doesn't seem to be a climax
       ;; keep big background ball up
@@ -614,9 +616,8 @@
       ;;;;;;;;;;;;;;
       ;@expanding-circle
       ;@seed
-      ;@earth)))
-
-      ;;;;;;;;;;;;;;;;;
+      ;@earth
+      ;;;;;;;;;;;;;;;;;;
       ;;; SUN-SHAPES ;;;
       ;;;;;;;;;;;;;;;;;;
       ;(map (fn [[x y]]
@@ -835,7 +836,7 @@
 (when-not DEBUG
   (defonce start-cx-timer
     (js/setInterval
-      #(reset! collection (cx @frame)) (/ @ms 10)))
+      #(reset! collection (cx @frame)) (* 100 @ms)))
 
   ;(defonce start-cx-timer-2
   ;  (js/setInterval
@@ -843,7 +844,7 @@
 
   (defonce start-frame-timer
     (js/setInterval
-      #(swap! frame inc) @ms)))
+      #(swap! frame inc) (* 1000 @ms))))
 
 
 ;; ----------- DEFS AND DRAW ------------------------------
