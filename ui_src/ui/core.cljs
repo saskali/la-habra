@@ -321,8 +321,8 @@
        (r/atom)))
 
 (def pixie-dust-anim
-  (->> (gen-grid 86 42
-                 {:col 40 :row 40}
+  (->> (gen-grid 20 20
+                 {:col 100 :row 100}
                  (gen-shape mint oct))
        (map #(style {:mix-blend-mode "difference"
                      :opacity 0.1}  %))
@@ -494,23 +494,41 @@
 ;;;;;;;;;;;;;;
 
 (defonce splash-g (scatter 20 (->> (gen-circ gray 10 10 20)
-                                   (style {:opacity 0.4})
+                                   (style {:opacity 0.8
+                                           :animation (str "fade-in-out "
+                                                           (* (+ 8 (rand-int 9)) @ms)
+                                                           "s linear infinite")})
                                    (draw))))
 
 (defonce splash-y (scatter 20 (->> (gen-circ yellow 10 10 20)
-                                   (style {:opacity 0.4})
+                                   (style {:opacity 0.8
+                                           :animation (str "fade-in-out "
+                                                           (* (+ 6 (rand-int 9)) @ms)
+                                                           "s linear infinite")})
                                    (draw))))
 
 (defonce splash-yl (scatter 10 (->> (gen-circ yellow 10 10 60)
-                                    (style {:mix-blend-mode "screen"})
+                                    (style {:opacity 0.8
+                                            :animation (str "fade-in-out "
+                                                            (* (+ 8 (rand-int 9)) @ms)
+                                                            "s linear infinite")
+                                            :mix-blend-mode "screen"})
                                     (draw))))
 
 (defonce splash-ylo (scatter 10 (->> (gen-circ yellow 10 10 60)
-                                     (style {:mix-blend-mode "overlay"})
+                                     (style {:opacity 0.8
+                                             :animation (str "fade-in-out "
+                                                             (* (+ 6 (rand-int 9)) @ms)
+                                                             "s linear infinite")
+                                             :mix-blend-mode "overlay"})
                                      (draw))))
 
 (defonce splash-plm (scatter 10 (->> (gen-circ pink 10 10 60)
-                                     (style {:mix-blend-mode "multiply"})
+                                     (style {:opacity 0.8
+                                             :animation (str "fade-in-out "
+                                                             (* (+ 8 (rand-int 9)) @ms)
+                                                             "s linear infinite")
+                                             :mix-blend-mode "multiply"})
                                      (draw))))
 
 
@@ -606,11 +624,11 @@
 
 (defn cx [frame]
   (let
-    [colors [(:light-blue air-colors)];(slow-val-cyc 16 (->> earth-colors vals (take 4) vec)) (get earth-colors :dark-purple)
-            ;(slow-val-cyc 12 [midnight]) (:dark-blue water-colors)
-            ;(slow-val-cyc 12 [midnight])
-            ;(slow-val-cyc 12 [midnight])
-            ;(slow-val-cyc 12 [midnight])
+    [colors [(:dark-dark-blue water-colors)]; (:midnight earth-colors)
+            ; (:dark-blue water-colors)
+            ; orange
+            ; (:light-blue air-colors)
+            ; (:dark-dark-blue water-colors)
      {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
      s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
 
@@ -817,19 +835,19 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;; OVERLAY RECTANGLES ;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      (gen-moving-rects-hz frame 4 8)
-      (gen-moving-rects-vt frame 4 8)
-
-      ;;;;;;;;;;;;;;;;;;
-      ;;;;; FREAKOUT ;;;
-      ;;;;;;;;;;;;;;;;;;
-      (freak-out-waves s (:dark-dark-blue air-colors))
-      (new-freakout @width
-                    @height
-                    3
-                    (->> (slow-val-cyc 2 [80 50 25 50 80])
-                         (val-cyc frame))
-                    "testCirc2"))))
+      ;(gen-moving-rects-hz frame 4 8)
+      ;(gen-moving-rects-vt frame 4 8)
+      ;
+      ;;;;;;;;;;;;;;;;;;;
+      ;;;;;; FREAKOUT ;;;
+      ;;;;;;;;;;;;;;;;;;;
+      ;(freak-out-waves s (:dark-dark-blue air-colors))
+      ;(new-freakout @width
+      ;              @height
+      ;              3
+      ;              (->> (slow-val-cyc 2 [80 50 25 50 80])
+      ;                   (val-cyc frame))
+      ;              "testCirc2"))))
 
       ;[:text {:x (* 0.5 @width) :y (* 0.5 @height)
       ;        :style {:font-size 90
@@ -852,16 +870,15 @@
       ;; come up with transition
       ;; make circles blurry
 
-      ;(style {:filter (url (:id disappearing))}
-      ;@pixie-dust-anim)))
-
-      ;@shape-shift-anim)))
-      ;@splash-g
-      ;@splash-y
-      ;@splash-yl
-      ;@splash-ylo
-      ;@splash-plm
-      ;@splash-plm)))
+      ;(style {:filter (url (:id disappearing))})
+      @pixie-dust-anim
+      ;
+      @splash-g
+      @splash-y
+      @splash-yl
+      @splash-ylo
+      @splash-plm
+      @splash-plm)))
 
 
 (when DEBUG
