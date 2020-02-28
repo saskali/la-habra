@@ -34,6 +34,13 @@
    :dark-dark-blue "#1C2145"
    :blue "#1EB0F7"})
 
+(def air-colors
+  {:light-blue "#C5FFF8"
+   :mint "#B8FFCE"
+   :silver "#BCC6CC"
+   :dark-dark-blue "#1C2145"})
+
+
 ;; color set: blue - red - caramel
 (def color-set-1
   {:navy "#031838"
