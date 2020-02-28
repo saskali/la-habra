@@ -6,7 +6,7 @@
                                b1 b2 b3 b4
                                semi-circle]]
             [ui.fills :refer [gray mint navy blue midnight orange pink white yellow
-                              earth-colors water-colors blue-set-2 color-set-2]]
+                              earth-colors water-colors air-colors blue-set-2 color-set-2]]
             [ui.generators :refer [freak-out new-freakout freak-out-waves scatter lerp draw
                                    gen-circ gen-line gen-poly gen-rect gen-shape gen-half-circ
                                    gen-group gen-offset-lines gen-bg-lines gen-mask
@@ -519,9 +519,9 @@
 (defn gen-moving-rects-hz [frame speed partitions]
   (let [scales (get-scaling-factors speed partitions)
         largest-scaling-factor (last scales)]
-    (->> (gen-rect mint 0 0 (quot @width largest-scaling-factor) @height)
-         (style {:mix-blend-mode "difference"
-                 :opacity 0.6})
+    (->> (gen-rect (:mint air-colors) 0 0 (quot @width largest-scaling-factor) @height)
+         ;(style {:mix-blend-mode "difference"
+         ;        :opacity 0.6})
          (style {:transform (str "scaleX("
                                  (val-cyc frame scales)
                                  ")")})
@@ -531,7 +531,7 @@
 (defn gen-moving-rects-vt [frame speed partitions]
   (let [scales (get-scaling-factors speed partitions)
         largest-scaling-factor (last scales)]
-    (->> (gen-rect pink 0 0 @width (quot @height largest-scaling-factor))
+    (->> (gen-rect (:mint air-colors) 0 0 @width (quot @height largest-scaling-factor))
          (style {:mix-blend-mode "difference"
                  :opacity 0.6})
          (style {:transform (str "scaleY("
@@ -606,7 +606,7 @@
 
 (defn cx [frame]
   (let
-    [colors [(:dark-blue water-colors)];(slow-val-cyc 16 (->> earth-colors vals (take 4) vec)) (get earth-colors :dark-purple)
+    [colors [(:light-blue air-colors)];(slow-val-cyc 16 (->> earth-colors vals (take 4) vec)) (get earth-colors :dark-purple)
             ;(slow-val-cyc 12 [midnight]) (:dark-blue water-colors)
             ;(slow-val-cyc 12 [midnight])
             ;(slow-val-cyc 12 [midnight])
@@ -725,27 +725,27 @@
       ;; transition to fire
       ;; like explosion of colors -> more red though
       ;; shape that moves too predictable -> get in old hept merging thing
+
+      ;@oct-grid-anim
       ;
-      @oct-grid-anim
-
-      (when (or (= 0 (mod frame 4))
-                (= 2 (mod frame 4)))
-        (new-freakout @width @height 1 50 "mypent"))
-
-      @spinning-triangles-pink
-      @spinning-triangles-mint
-
-      ;@bg)))
-      ;@bb)))
+      ;(when (or (= 0 (mod frame 4))
+      ;          (= 2 (mod frame 4)))
+      ;  (new-freakout @width @height 1 50 "mypent"))
+      ;
+      ;@spinning-triangles-pink
+      ;@spinning-triangles-mint
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;; MOVING HEPTAGONS ;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      @hept1-mint-anim
-      @hept1-pink-anim
-      @hept1-white-dots-anim)))
+      ;@hept1-mint-anim
+      ;@hept1-pink-anim
+      ;@hept1-white-dots-anim)))
 
-      ;@anim-hept2-pink)))
+      ;@bg
+      ;@bb
+
+      ;@anim-hept2-pink
       ;@anim-hept2-mint
       ;@anim-hept2-white-dots
       ;
@@ -817,19 +817,26 @@
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;; OVERLAY RECTANGLES ;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;(gen-moving-rects-hz frame 8 8)
-      ;(gen-moving-rects-vt frame 8 8)
-      ;
-      ;;;;;;;;;;;;;;;;;
-      ;;;; FREAKOUT ;;;
-      ;;;;;;;;;;;;;;;;;
-      ;(freak-out-waves s aquamarine)
-      ;(new-freakout @width
-      ;              @height
-      ;              3
-      ;              (->> (slow-val-cyc 2 [100 50 25 50 100])
-      ;                   (val-cyc frame))
-      ;              "testCirc2"))))
+      (gen-moving-rects-hz frame 4 8)
+      (gen-moving-rects-vt frame 4 8)
+
+      ;;;;;;;;;;;;;;;;;;
+      ;;;;; FREAKOUT ;;;
+      ;;;;;;;;;;;;;;;;;;
+      (freak-out-waves s (:dark-dark-blue air-colors))
+      (new-freakout @width
+                    @height
+                    3
+                    (->> (slow-val-cyc 2 [80 50 25 50 80])
+                         (val-cyc frame))
+                    "testCirc2"))))
+
+      ;[:text {:x (* 0.5 @width) :y (* 0.5 @height)
+      ;        :style {:font-size 90
+      ;                :font-family "helvetica"
+      ;                :fill (:dark-purple earth-colors)
+      ;                :text-anchor "middle"}}
+      ; "hello clojureD"])))
 
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -953,7 +960,7 @@
 
 ;; TODO update
 (def all-filters [turb noiz soft-noiz disappearing splotchy blur])
-(def all-fills [gray mint navy blue orange pink white yellow midnight])
+(def all-fills [gray mint navy blue orange pink white yellow midnight (:silver air-colors)])
 
 (def mix-blend-modes
   ["luminosity" ;; 0
@@ -1007,7 +1014,7 @@
                :fill (pattern (str "noise-" white))}]
      [:circle {:id "testCirc2"
                :cx 0 :cy 0 :r 100
-               :fill (pattern (str "noise-" mint))}]
+               :fill (pattern (str "noise-" (:silver air-colors)))}]
      [:circle {:id "testCirc3"
                :cx 0 :cy 0 :r 100
                :style {:animation "colorcolorcolor 10s infinite"
