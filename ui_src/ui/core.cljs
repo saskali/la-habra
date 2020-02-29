@@ -140,8 +140,8 @@
                  (* 0.5 @width)
                  (* 1.4 @height)
                  560)
-       ;(anim "pulse" 32 @ms "2")
-       (anim "pulse2" 32 @ms "infinite")
+       (anim "pulse" 32 @ms "infinite")
+       ;(anim "pulse2" 32 @ms "infinite")
        (draw)
        (r/atom)))
 
@@ -623,73 +623,53 @@
 ;(defn cx2 [frame])
 
 (defn cx [frame]
-  (let
-    [colors [(:dark-dark-blue water-colors)]; (:midnight earth-colors)
-            ; (:dark-blue water-colors)
-            ; orange
-            ; (:light-blue air-colors)
-            ; (:dark-dark-blue water-colors)
-     {:keys [dark-green aquamarine brown-red orange-red]} blue-set-2
-     s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
+  (let [bg-colors [(:dark-dark-blue water-colors)]; (:midnight earth-colors)
+                                                  ; (:dark-blue water-colors)
+                                                  ; orange
+                                                  ; (:light-blue air-colors)
+                                                  ; (:dark-dark-blue water-colors)
+        s (->> (quot frame 4) (.sin js/Math) (.abs js/Math))]
 
     (list
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;; BACKGROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      (->> (gen-rect (val-cyc frame colors) 0 0 "100vw" "100%")
-           ;(style {:opacity 0.9})
-           (draw))
+      (->> (gen-rect (val-cyc frame bg-colors) 0 0 "100vw" "100%")
+           (draw)))))
 
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;;;;;;;;;;;; PATTERNS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; EARTH ;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-      ;; missing sense for resolution
-      ;; there doesn't seem to be a climax
-      ;; keep big background ball up
-      ;; make small structures collapse in themselves and slowly disappear
-      ;; collapse big ball on the bottom
 
       ;;;;;;;;;;;;;;
       ;;; GROUND ;;;
       ;;;;;;;;;;;;;;
       ;@expanding-circle
       ;@seed
-      ;@earth
-      ;;;;;;;;;;;;;;;;;;
+      ;@earth)))
+
+      ;;;;;;;;;;;;;;;;
       ;;; SUN-SHAPES ;;;
       ;;;;;;;;;;;;;;;;;;
       ;(map (fn [[x y]]
-      ;       (sun-shape frame midnight x y {} s (val-cyc frame (->> (range 1 9) (slow-val-cyc 4)))))
+      ;       (sun-shape frame
+      ;                  midnight
+      ;                  x y {} s
+      ;                  (val-cyc frame (->> (range 1 9) (slow-val-cyc 4)))))
+      ;
       ;     [[360 200] [660 300] [960 200] [1260 300] [1560 200]
       ;      [960 500] [460 500] [1460 500]
-      ;      [700 700] [1200 700]])
-      ;
+      ;      [700 700] [1200 700]]))))
+
       ;(->> (gen-half-circ midnight 916 200)
       ;     (draw)))))
+
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; WATER ;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;; TODOS
-      ;; bring in more fluid movements
-      ;; rotate drops
-      ;; too many straight lines -> more round things
-      ;; sine waves instead of horizontal waves
-      ;; something like raindrops
-      ;; some shape moving from outside of screen in sine waves to other side
-      ;; waves - ripple effect on the water
-      ;; drops are good
-      ;; more random drops
-      ;; grid of dots feels out of place -> too predictable -> maybe random -> colors of the balls are orange
-      ;; blur noise circ anim -> go forwards and backwards for continuity
-      ;; bb5 is too predictable kind of repeatedly too sharp -> random movement
-      ;
       ;(gen-bg-lines (:blue water-colors)
       ;              (mod frame 70)
       ;              {:opacity 0.4})
@@ -699,10 +679,10 @@
       ;
       ;(when (> (mod frame 16) 4)
       ;  @drops2)
-      ;
+
       ;(when (nth-frame 4 frame)
       ;  @(frame-flimmer-shapes))
-      ;
+
       ;@spiral-ball1
       ;@spiral-ball2
       ;@spiral-ball3
@@ -710,138 +690,43 @@
       ;@spiral-ball5
       ;@spiral-ball6)))
 
-      ;;; (style {:filter (url (:id turb))}
-      ;
-      ;@bb5)))
-      ;
-      ;@noise-circ-anim)))
-
-
-
-      ;(gen-cols brown-red (* 6 (mod frame 10)) 60 60)
-      ;
-      ;(->> (gen-grid 20 20
-      ;               {:col 100 :row 100}
-      ;               (gen-circ orange-red 30 30 (-> (* 10 s) (+ 6))))
-      ;     (map #(style {:opacity 0.7} %))
-      ;     (map draw)))))
-
-      ;(gen-moving-rects-vt frame 2 10)
-      ;(gen-moving-rects-hz frame 2 10))))
-
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; FIRE ;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;; TODOS
-      ;; might keep some elements between phases
-      ;; first thing that gets in musically: congas
-      ;; things flashing: dots scattered randomly - blink - shrink - enlarge
-      ;; build up with kick - sync something - circle
-      ;; heptagon too predictable - more chaotic - animate at random positions)))
-      ;; transition to fire
-      ;; like explosion of colors -> more red though
-      ;; shape that moves too predictable -> get in old hept merging thing
-
       ;@oct-grid-anim
-      ;
+
       ;(when (or (= 0 (mod frame 4))
       ;          (= 2 (mod frame 4)))
       ;  (new-freakout @width @height 1 50 "mypent"))
-      ;
-      ;@spinning-triangles-pink
-      ;@spinning-triangles-mint
 
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;; MOVING HEPTAGONS ;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;@spinning-triangles-pink
+      ;@spinning-triangles-mint)))
+
+      ;;;;;;;;;;;;;;;;;
+      ;;; HEPTAGONS ;;;
+      ;;;;;;;;;;;;;;;;;
       ;@hept1-mint-anim
       ;@hept1-pink-anim
-      ;@hept1-white-dots-anim)))
-
-      ;@bg
-      ;@bb
-
-      ;@anim-hept2-pink
-      ;@anim-hept2-mint
-      ;@anim-hept2-white-dots
-      ;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;; OVERLAY RECTANGLES ;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;(->> (gen-rect mint 0 0 400 600)
-      ;     (style {:mix-blend-mode "difference"
-      ;             :opacity 0.6})
-      ;     (style {:transform (str "scale("
-      ;                             (val-cyc frame (concat (repeat 3 4)
-      ;                                                    (repeat 3 6)
-      ;                                                    (repeat 3 8)
-      ;                                                    (repeat 3 20)))
-      ;                             ")")})
-      ;     (draw)
-      ;     (when (nth-frame 1 frame)))
-      ;
-      ;(->> (gen-rect pink 0 0 400 600)
-      ;     (style {:mix-blend-mode "difference"
-      ;             :opacity 0.6})
-      ;     (style {:transform (str "scale("
-      ;                             (val-cyc frame (concat (repeat 3 20)
-      ;                                                    (repeat 3 8)
-      ;                                                    (repeat 3 6)
-      ;                                                    (repeat 3 4)))
-      ;                             ")")})
-      ;     (draw)
-      ;     (when (nth-frame 1 frame))))))
-
-      ;;;;;;;;;;;;;;;
-      ;;;; SPLASH ;;;
-      ;;;;;;;;;;;;;;;
-      ;(when (and (nth-frame 4 frame)
-      ;           (nth-frame 3 frame)) @splash-yellow)
-      ;
-      ;(when (nth-frame 5 frame) @splash-gray)
-      ;
-      ;;;;;;;;;;;;;
-      ;;;; GRID ;;;
-      ;;;;;;;;;;;;;
-      ;(when (nth-frame 4 frame)
-      ;  (gen-line-grid pink 6 80 80
-      ;                 {:col 200 :row 200})))))
-
-      ;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;; FREAKOUT CIRCLE ;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;
-      ;(when (nth-frame 3 frame)
-      ;  (new-freakout @width @height 2 50 "testCirc3")))))
+      ;@hept1-white-dots-anim
 
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;; AIR ;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;; TODOS
-      ;; gradient seemless transitions
-      ;; maybe circles are moving too fast
-      ;; pick different colors
-      ;; fill the screen even more
-      ;; gpu not happy with huge amount of objects -> use blur
-      ;; small balls are good
-      ;; airy colors -> lots of blues
-      ;; more variation
-      ;; come up with build up
-      ;
-      ;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;; OVERLAY RECTANGLES ;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;
+      ;;;; BACKGROUND ;;;
+      ;;;;;;;;;;;;;;;;;;;
       ;(gen-moving-rects-hz frame 4 8)
-      ;(gen-moving-rects-vt frame 4 8)
-      ;
+      ;(gen-moving-rects-vt frame 4 8))))
+
       ;;;;;;;;;;;;;;;;;;;
       ;;;;;; FREAKOUT ;;;
       ;;;;;;;;;;;;;;;;;;;
-      ;(freak-out-waves s (:dark-dark-blue air-colors))
+      ;(freak-out-waves s (:dark-dark-blue air-colors)))))
+
       ;(new-freakout @width
       ;              @height
       ;              3
@@ -854,31 +739,21 @@
       ;                :font-family "helvetica"
       ;                :fill (:dark-purple earth-colors)
       ;                :text-anchor "middle"}}
-      ; "hello clojureD"])))
+      ; "hey there ClojureD"])))
 
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;; ETHER ;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      ;; TODOS
-      ;; no straight shapes
-      ;; like idea of rotation - make it infinite?
-      ;; spirals made of circles
-      ;; rough background not ideal use gradient
-      ;; good blur
-      ;; come up with transition
-      ;; make circles blurry
+      ;@pixie-dust-anim
 
-      ;(style {:filter (url (:id disappearing))})
-      @pixie-dust-anim
-      ;
-      @splash-g
-      @splash-y
-      @splash-yl
-      @splash-ylo
-      @splash-plm
-      @splash-plm)))
+      ;@splash-g
+      ;@splash-y
+      ;@splash-yl
+      ;@splash-ylo
+      ;@splash-plm
+      ;@splash-plm)))
 
 
 (when DEBUG
@@ -1008,7 +883,7 @@
       flatten))
 
 (defn drawing []
-  [:svg {:style {:mix-blend-mode (val-cyc @frame (set-all-modes [[3 3]]))}
+  [:svg {:style {:mix-blend-mode (val-cyc @frame (set-all-modes [[3 12]]))}
          :width  (:width settings)
          :height (:height settings)}
 
